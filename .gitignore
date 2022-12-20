@@ -1,0 +1,8 @@
+node_modules
+package-lock.json
+.cache
+.config
+node_modules
+.env
+db.sqlite3
+.next
