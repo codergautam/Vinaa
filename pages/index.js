@@ -11,7 +11,7 @@ import Footer from "@/components/Footer"
 
 import desktopBackground from "@/assets/backgrounds/vina-bg-desktop.svg"
 import mobileBackground from "@/assets/backgrounds/vina-bg-mobile.svg"
-import loloWave from "@/assets/animations/lolo-wave.json"
+import indiaAnimation from "@/assets/animations/india.json"
 
 import { unstable_getServerSession as getServerSession } from "next-auth/next"
 import { authOptions } from "../pages/api/auth/[...nextauth]"
@@ -46,15 +46,13 @@ const Wrapper = styled.div`
 
 // top section
 const Hero = styled.div`
-  height: calc(300px + 20vw);
+  height: 95vh;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: clamp(30px, 40px, 70px);
 `
 const FrontMessage = styled.div`
-  min-width: 40%;
-  max-width: 75%;
 `
 const Title = styled.h1`
   font-size: clamp(3rem, 9vw, 5rem);
@@ -80,14 +78,7 @@ const Animation = styled(Lottie)`
   }
 `
 const animationInteractivity = {
-  mode: "cursor",
-  actions: [
-    {
-      position: { x: [0, 1], y: [0, 1] },
-      type: "seek",
-      frames: [0, 180]
-    }
-  ]
+  loop: false
 }
 
 // latest section
@@ -124,7 +115,7 @@ const MoreSets = styled(Link)`
 `
 
 const Filler = styled.div`
-  height: 100px;
+  height: 0px;
 `
 
 
@@ -135,13 +126,13 @@ function HomePage() {
       <PageTitle title="Home" />
       <Hero>
         <Animation
-          animationData={loloWave}
-          interactivity={animationInteractivity}
+          animationData={indiaAnimation}
+          loop={false}
         />
         <FrontMessage>
           <Title><Underline>Vina</Underline></Title>
           <Description>
-            Create, share, and practice quizzes!
+            தமிழ் கற்க சிறந்த வழி!
           </Description>
           <ActionGroup>
             <Button onClick={signin}>Get started</Button>
@@ -149,29 +140,8 @@ function HomePage() {
           </ActionGroup>
         </FrontMessage>
       </Hero>
-      <LatestSectionWrapper>
-        <LatestSection>
-          <LatestTitle><Underline>Latest sets</Underline></LatestTitle>
-          <p></p>
-          <Sets />
-          <p style={{ marginTop: 20 }}>
-            <MoreSets href="/sets/all">
-              <Underline
-                styles={
-                  `transition: background-size 300ms;
-                  :hover {
-                    background-size: 100% 10px;
-                  }`
-                }
-              >
-                Find more &rarr;
-              </Underline>
-            </MoreSets>
-          </p>
-        </LatestSection>
-      </LatestSectionWrapper>
       <Filler />
-      <Footer />
+      {/* <Footer />x/ */}
     </Wrapper>
   );
 }
