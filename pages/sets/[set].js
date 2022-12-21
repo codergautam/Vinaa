@@ -68,10 +68,25 @@ export default function Set() {
                     setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
-                      return setDone(true)
-
-                      //
-                    }
+                      const correct = temp.filter((r) => r.correct).length
+                      const accuracy = Math.round((correct / q+1) * 100)
+                       fetch("/api/sets/progress", {
+                         method: "POST",
+                         body: JSON.stringify({
+                           id: set,
+                           accuracy,
+                         }),
+                       }).then((res) => {
+                          res.json().then((data) => {
+                            if (data.error) {
+                              toast.error(data.error)
+                            } else {
+                              toast.success("You now have " + data.points + " points on this lesson!");
+                              setDone(true)
+                            }
+                          });
+                        });
+                     }
                   }}
                 />
               </Card>

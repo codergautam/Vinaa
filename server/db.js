@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3"
+import { v4 } from 'uuid';
 
 const db = new sqlite3.Database("./db.sqlite3")
 db.run(`CREATE TABLE IF NOT EXISTS sets (
@@ -8,10 +9,40 @@ db.run(`CREATE TABLE IF NOT EXISTS sets (
   id varchar(10)
 )`)
 db.run(`CREATE TABLE IF NOT EXISTS progress (
+  setId varchar(10),
+  userId varchar(255),
+  points int
+)`)
+db.run(`CREATE TABLE IF NOT EXISTS users (
   id varchar(10),
   user varchar(255),
-  progress varchar(30000)
+  email varchar(255),
+  fname varchar(255)
 )`)
+
+export function userExists(email) {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM users WHERE email=?", [email], (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        data ? resolve(true) : resolve(false)
+      }
+    })
+  })
+}
+
+export function createUser({ id=v4(), user, email, fname }) {
+  return new Promise((resolve, reject) => {
+    db.run("INSERT INTO users VALUES (?,?,?,?)", [id, user, email, fname], (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(id)
+      }
+    })
+  })
+}
 
 export function createSet({ name, questions, user, id }) {
   return new Promise((resolve, reject) => {
@@ -36,41 +67,39 @@ export function getSet(id) {
   })
 }
 
-export function createProgress({ id, user, progress }) {
-  console.log(id, user, progress)
+export function progressExists({id, set}) {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM progress WHERE userId=? AND setId=?", [id, set], (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        data ? resolve(data.points) : resolve(false)
+      }
+    })
+  })
+}
 
+export function setProgress({ id, user, points }) {
   return new Promise((resolve, reject) => {
-    db.run("INSERT INTO progress VALUES (?,?,?)", [id, user, JSON.stringify(progress)], (err) => {
+    progressExists({id, set: user}).then(exists => {
+      if(exists) {
+    db.run("UPDATE progress SET points = ? WHERE id = ? and user = ?", [exists+points, id, user], (err) => {
       if (err) {
         reject(err)
       } else {
-        resolve()
+        resolve(exists+points)
       }
     })
-  })
-}
-export function updateProgress({ id, user, progress }) {
-  console.log(id, user, progress)
-  return new Promise((resolve, reject) => {
-    db.run("UPDATE progress SET progress = ? WHERE id = ? and user = ?", [JSON.stringify(progress), id, user], (err) => {
+      } else {
+    db.run("INSERT INTO progress VALUES (?,?,?)", [id, user, points], (err) => {
       if (err) {
         reject(err)
       } else {
-        resolve()
+        resolve(points)
       }
     })
-  })
-}
-export function getProgress(id, user) {
-  return new Promise((resolve, reject) => {
-    db.all(
-      "SELECT progress FROM progress WHERE id=? AND user=? ORDER BY ROWID DESC",
-      [id, user],
-      (err, rows) => {
-        if(err) return reject(err)
-        resolve(rows)
-      }
-    )
+  };
+});
   })
 }
 
