@@ -19,11 +19,11 @@ const Title = styled.h2`
 
 export default function Header({ title, id }) {
   const [modal, setModal] = useState(false)
-  
+
   return (
     <>
       <Bar>
-        <Button secondary href="/dashboard">&larr; Back</Button>
+        <Button secondary href="/learn">&larr; Back</Button>
         <Title>{title}</Title>
         <Button onClick={() => setModal(true)}>Previous attempts</Button>
       </Bar>

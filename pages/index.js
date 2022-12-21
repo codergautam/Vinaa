@@ -23,7 +23,7 @@ export async function getServerSideProps({ req, res }) {
     return {
       redirect: {
         permanent: false,
-        destination: "/dashboard"
+        destination: "/learn"
       }
     }
   }
@@ -120,7 +120,7 @@ const Filler = styled.div`
 
 
 function HomePage() {
-  const signin = () => signIn("google", { callbackUrl: "/dashboard" });
+  const signin = () => signIn("google", { callbackUrl: "/learn" });
   return (
     <Wrapper>
       <PageTitle title="Home" />
@@ -130,7 +130,7 @@ function HomePage() {
           loop={false}
         />
         <FrontMessage>
-          <Title><Underline>Vina</Underline></Title>
+          <Title className="upper"><Underline>Vinaa</Underline></Title>
           <Description>
             தமிழ் கற்க சிறந்த வழி!
           </Description>

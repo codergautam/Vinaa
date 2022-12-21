@@ -62,29 +62,6 @@ export default function Set() {
                   last={data.questions.length - 1 === q}
                   data={data.questions[q]}
                   done={(selected) => {
-                    const body = JSON.stringify({
-                      id: data.id,
-                      q,
-                      selected,
-                      correct: data.questions[q].answers[selected].correct
-                    })
-                    fetch("/api/sets/progress", {
-                      method: "POST",
-                      headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                      },
-                      body,
-                    }).then(res => res.json()).then(console.log).catch((e) => {
-                      console.error(e)
-                      toast.error(
-                        "An unexpected error occured while saving your progress",
-                        {
-                          position: "bottom-center",
-                        }
-                      )
-                    })
-
                     const temp = results.slice()
                     temp.push(selected)
                     setResults(temp)
@@ -92,6 +69,8 @@ export default function Set() {
 
                     if (q + 1 === data.questions.length) {
                       return setDone(true)
+
+                      //
                     }
                   }}
                 />

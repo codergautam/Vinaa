@@ -37,6 +37,8 @@ export function getSet(id) {
 }
 
 export function createProgress({ id, user, progress }) {
+  console.log(id, user, progress)
+
   return new Promise((resolve, reject) => {
     db.run("INSERT INTO progress VALUES (?,?,?)", [id, user, JSON.stringify(progress)], (err) => {
       if (err) {
@@ -48,6 +50,7 @@ export function createProgress({ id, user, progress }) {
   })
 }
 export function updateProgress({ id, user, progress }) {
+  console.log(id, user, progress)
   return new Promise((resolve, reject) => {
     db.run("UPDATE progress SET progress = ? WHERE id = ? and user = ?", [JSON.stringify(progress), id, user], (err) => {
       if (err) {

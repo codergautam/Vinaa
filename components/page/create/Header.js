@@ -40,7 +40,7 @@ const Set = styled.span`
 export default function Header({ name, setName, publish, children, loading }) {
   return (
     <Bar>
-      <Button secondary href="/dashboard">Back &larr;</Button>
+      <Button secondary href="/learn">Back &larr;</Button>
       <Set
         onFocus={e => {
           // select the rename on click

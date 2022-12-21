@@ -10,7 +10,6 @@ const Foot = styled.footer`
 export default function Footer() {
   return (
     <Foot>
-      &copy; Copyright {new Date().getFullYear()} | Vina
     </Foot>
   )
 }
