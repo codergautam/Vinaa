@@ -11,7 +11,7 @@ POST:
 import {
   API
 } from "@/server/protected"
-import { useSession, getSession } from "next-auth"
+import { getSession } from "next-auth/react"
 import {
   createProgress,
   updateProgress,
@@ -33,19 +33,21 @@ export default async function handler(req, res) {
       })
 
       const session = await getSession({ req })
-      if(!session) return res.status(401).json({
+      console.log(session)
+      if(!session.id) return res.status(401).json({
         message: "Unauthorized"
       })
 
     try {
-      const { id, accuracy } = req.body
+      const { id, accuracy } = JSON.parse(req.body)
 
       if(!id || !accuracy) return res.status(400).json({
         message: "Missing setId or accuracy"
       })
 
-      const newPoints = await setProgress({ id, user: data.username, points: accuracy })
-      console.log(newPoints)
+      console.log("id", id, "accuracy", accuracy, "user", session.id)
+
+      const newPoints = await setProgress({ id, user: session.id, points: accuracy })
 
       return res.status(200).json({
         points: newPoints

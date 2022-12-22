@@ -25,11 +25,11 @@ export const authOptions = {
       session.username = token.username
       session.fname = token.fname
 
-      let exists = await userExists(token.email);
-      if (!exists) {
-        let id = await createUser({ user: token.username, email: token.email, fname: token.fname })
-        session.id = id;
+      let id = await userExists(token.email);
+      if (!id) {
+        id = await createUser({ user: token.username, email: token.email, fname: token.fname })
       }
+      session.id = id;
       return session
     }
   },

@@ -61,15 +61,16 @@ export default function Set() {
                 <Question
                   last={data.questions.length - 1 === q}
                   data={data.questions[q]}
-                  done={(selected) => {
+                  done={(selected, correct) => {
                     const temp = results.slice()
-                    temp.push(selected)
-                    setResults(temp)
+                    temp.push([selected, correct])
+                    setResults(temp.map((r) => r[0]))
                     setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
-                      const correct = temp.filter((r) => r.correct).length
-                      const accuracy = Math.round((correct / q+1) * 100)
+                      const correct = temp.filter((r) => r[1]).length
+                      const accuracy = Math.round((correct / (q+1)) * 100)
+                      // console.log(temp, correct, q+1, accuracy)
                        fetch("/api/sets/progress", {
                          method: "POST",
                          body: JSON.stringify({

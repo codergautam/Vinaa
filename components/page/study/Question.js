@@ -57,16 +57,21 @@ export default function Question({
 
   useEffect(() => {
     setSelected()
-  }, [data.id])
-
+  }, [data?.id])
   let correctIndex = 0
+
+  if(data) {
   for (let i in data.answers) {
     if (data.answers[i].correct) {
       correctIndex = +i
       break
     }
   }
+  } else {
+    return (<div></div>);
+  }
 
+  if(data) {
   return (
     <Wrapper ref={parent}>
       <Ask>{data.question}</Ask>
@@ -101,10 +106,11 @@ export default function Question({
         })}
       </Options>
       {(typeof selected === "number") ? (
-        <Button onClick={() => done(selected)}>
+        <Button onClick={() => done(selected, selected == correctIndex)}>
           {last ? "Done" : "Next"} &rarr;
         </Button>
       ) : null}
     </Wrapper>
   )
+      }
 }

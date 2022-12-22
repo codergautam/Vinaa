@@ -26,7 +26,7 @@ export function userExists(email) {
       if (err) {
         reject(err)
       } else {
-        data ? resolve(true) : resolve(false)
+        data ? resolve(data.id) : resolve(false)
       }
     })
   })
@@ -68,6 +68,8 @@ export function getSet(id) {
 }
 
 export function progressExists({id, set}) {
+  // id = user id
+  // set = set id
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM progress WHERE userId=? AND setId=?", [id, set], (err, data) => {
       if (err) {
@@ -80,10 +82,13 @@ export function progressExists({id, set}) {
 }
 
 export function setProgress({ id, user, points }) {
+  // id = set id
+  // user = user id
+  // points = points to add
   return new Promise((resolve, reject) => {
-    progressExists({id, set: user}).then(exists => {
+    progressExists({set: id, id: user}).then(exists => {
       if(exists) {
-    db.run("UPDATE progress SET points = ? WHERE id = ? and user = ?", [exists+points, id, user], (err) => {
+    db.run("UPDATE progress SET points = ? WHERE setId = ? and userId = ?", [exists+points, id, user], (err) => {
       if (err) {
         reject(err)
       } else {
