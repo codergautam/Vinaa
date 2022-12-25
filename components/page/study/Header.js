@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Button from "@/components/Button"
 
 import Progress from "@/components/page/study/Progress"
+import LogoText from "@/components/Navbar/LogoText"
 
 const Bar = styled.header`
   height: 4em;
@@ -24,8 +25,8 @@ export default function Header({ title, id }) {
     <>
       <Bar>
         <Button secondary href="/learn">&larr; Back</Button>
-        <Title>{title}</Title>
-        <Button onClick={() => setModal(true)}>Previous attempts</Button>
+        <Title>Set: {title}</Title>
+        <LogoText size="30px"/>
       </Bar>
       {modal ? <Progress close={() => setModal(false)} set={id} /> : null}
     </>

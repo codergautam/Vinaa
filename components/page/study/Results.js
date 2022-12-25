@@ -115,6 +115,10 @@ function res(data, results) {
       correct++
       continue
     }
+
+    console.log("hmm", question.answers)
+    console.log("hmmm", results, results[i], i);
+    console.log(question.answers[results[i]]);
     messedUp.push({
       question: question.question,
       chose: question.answers[results[i]].label,

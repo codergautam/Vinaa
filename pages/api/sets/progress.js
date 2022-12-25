@@ -41,8 +41,12 @@ export default async function handler(req, res) {
     try {
       const { id, accuracy } = JSON.parse(req.body)
 
-      if(!id || !accuracy) return res.status(400).json({
+      if(!id || accuracy === undefined) return res.status(400).json({
         message: "Missing setId or accuracy"
+      })
+
+      if(isNaN(accuracy) || accuracy < 0 || accuracy > 100) return res.status(400).json({
+        message: "Accuracy must be a number between 0 and 100"
       })
 
       console.log("id", id, "accuracy", accuracy, "user", session.id)

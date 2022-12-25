@@ -1,6 +1,7 @@
 import { signOut } from "next-auth/react"
 import { useState } from "react"
 import styled from "styled-components"
+import LogoText from "./LogoText"
 
 const Nav = styled.nav`
   display: flex;
@@ -68,9 +69,7 @@ export default function Navbar(props) {
   return (
     <div>
       <Nav>
-          <Link href="/">
-              <h1 className="upper">Vinaa</h1>
-          </Link>
+          <LogoText/>
           <UserItem onClick={()=>{setHover(!hover)}}>
             <span >{props.name}</span>
 

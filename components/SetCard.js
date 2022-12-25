@@ -55,8 +55,8 @@ return (
   <Set key={set.id} onClick={e => {
     // if the user is trying to click on the creator of the set
     // don't take them to the actual set
-    if(e.target.tagName !== "A")
-      router.push("/sets/" + set.id);
+    // if(e.target.tagName !== "A")
+    //   router.push("/sets/" + set.id);
   }}>
     <SetTitle href={"/sets/" + set.id}>
       {set.name}

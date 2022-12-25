@@ -63,8 +63,9 @@ export default function Set() {
                   data={data.questions[q]}
                   done={(selected, correct) => {
                     const temp = results.slice()
-                    temp.push([selected, correct])
-                    setResults(temp.map((r) => r[0]))
+                    temp.push(selected)
+                    console.log("temp", temp)
+                    setResults(temp)
                     setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
