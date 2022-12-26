@@ -38,4 +38,4 @@ The code is commented where comments are due, so go ahead! Remix and play around
 MIT
 
 ### Credits
-This project was written by [@codingjlu](https://replit.com/@codingjlu)
+This project was written by [@codergautam](https://github.com/codergautam) with special thanks to [@codingjlu](https://replit.com/@codingjlu)
