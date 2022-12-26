@@ -56,7 +56,6 @@ const DropDownContent = styled.div`
   float: right;
   background-color: var(--color-white);
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 5px;
@@ -77,10 +76,11 @@ export default function Navbar(props) {
 
 
       </Nav>
-      <DropDownContent style={{display:hover?"inline-block":"none", transform: 'translate(0,-5%)'}} onMouseEnter={()=>{setHover(true)}}>
+      <DropDownContent style={{display:hover?"inline-block":"none", textAlign: "center", transform: 'translate(0,-10px)'}} onMouseEnter={()=>{setHover(true)}}>
 
-        <Link onClick={() => {signOut({callbackUrl: '/'})}}>Logout</Link>
+        <Link style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%'}} onClick={() => {signOut({callbackUrl: '/'})}}>Logout</Link>
       </DropDownContent>
+
 
     </div>
   );

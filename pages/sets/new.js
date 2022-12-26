@@ -113,12 +113,20 @@ export default function New() {
 
   const updateQuestion = (index, data) => {
     const temp = questions.slice()
-    temp[index] = data
+    if(temp[index]) temp[index] = data
+    if(temp.length > 0) temp[temp.length - 1].last = true
+
     setQuestions(temp)
   }
   const remove = index => {
     const temp = questions.slice()
     temp.splice(index, 1)
+    for(let i = index; i < temp.length; i++) {
+      temp[i].id--
+    }
+    if(temp.length > 0) {
+    temp[temp.length - 1].last = true
+    }
     setQuestions(temp)
   }
   const newQuestion = () => {
@@ -153,7 +161,15 @@ export default function New() {
         }
       ],
       id: questions.length,
+      prompt: "",
+      questionAudio: false,
+      answerAudio: false,
+      showQuestion: true,
     })
+    if(temp.length > 0) {
+    temp[temp.length - 1].last = true
+    if(temp.length > 1) temp[temp.length - 2].last = false
+    }
     setQuestions(temp)
   }
 
@@ -177,13 +193,16 @@ export default function New() {
             if(!q.question.length) {
               return toaster(`Question ${i + 1} must have question text`)
             }
+            if(!q.prompt.length) {
+              return toaster(`Question ${i + 1} must have prompt text`)
+            }
             if(q.answers.length < 2 || q.answers.length > 4) {
               return toaster(`Question ${i + 1} must have between 2 and 4 answers`)
             }
             let hasCorrect = false
             for(const a of q.answers) {
               if(!a.label.length) {
-                return toaster(`The answer field for question ${i + 1} cannot be empty`)
+                return toaster(`An answer field for question ${i + 1} cannot be empty`)
               }
               if(a.correct && hasCorrect) {
                 return toaster("Wait, why are you messing with me?")
@@ -223,6 +242,8 @@ export default function New() {
           })
           Router.push("/sets/" + data.id)
         }} loading={loading}>
+
+
           {loading ? <Spinner /> : "Publish"}
         </Header>
         <Card ref={parent}>

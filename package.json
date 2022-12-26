@@ -22,6 +22,7 @@
     "next": "^13.0.7",
     "next-auth": "^4.17.0",
     "react": "^18.2.0",
+    "react-contenteditable": "^3.3.6",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-hot-toast": "^2.4.0",
