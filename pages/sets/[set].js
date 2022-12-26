@@ -44,6 +44,7 @@ export default function Set() {
   const { data, error } = useSWR(set ? `/api/sets/${set}` : null, fetcher)
   const [done, setDone] = useState(false)
   const [results, setResults] = useState([])
+  const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
   const [parent] = useAutoAnimate()
 
@@ -64,12 +65,15 @@ export default function Set() {
                   done={(selected, correct) => {
                     const temp = results.slice()
                     temp.push(selected)
+                    let tempCorrect = correctCnt;
+                    if (correct) tempCorrect++;
+                    setCorrectCnt(tempCorrect);
                     console.log("temp", temp)
                     setResults(temp)
                     setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
-                      const correct = temp.filter((r) => r[1]).length
+                      const correct = tempCorrect;
                       const accuracy = Math.round((correct / (q+1)) * 100)
                       // console.log(temp, correct, q+1, accuracy)
                        fetch("/api/sets/progress", {
