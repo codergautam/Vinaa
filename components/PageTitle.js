@@ -4,7 +4,7 @@ import Head from "next/head";
 export default function PageTitle({ title }) {
   return (
     <Head>
-      <title>{title + " | Vina"}</title>
+      <title>{title + " | Vinaa"}</title>
     </Head>
   );
 }

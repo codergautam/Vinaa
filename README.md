@@ -1,4 +1,4 @@
-# Vina
+# Vinaa
 Quiz app built with NextJS, styled-components, and SQLite
 
 ### Usage

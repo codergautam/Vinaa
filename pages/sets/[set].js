@@ -44,6 +44,7 @@ export default function Set() {
   const { data, error } = useSWR(set ? `/api/sets/${set}` : null, fetcher)
   const [done, setDone] = useState(false)
   const [results, setResults] = useState([])
+  const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
   const [parent] = useAutoAnimate()
 
@@ -61,38 +62,37 @@ export default function Set() {
                 <Question
                   last={data.questions.length - 1 === q}
                   data={data.questions[q]}
-                  done={(selected) => {
-                    const body = JSON.stringify({
-                      id: data.id,
-                      q,
-                      selected,
-                      correct: data.questions[q].answers[selected].correct
-                    })
-                    fetch("/api/sets/progress", {
-                      method: "POST",
-                      headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                      },
-                      body,
-                    }).then(res => res.json()).then(console.log).catch((e) => {
-                      console.error(e)
-                      toast.error(
-                        "An unexpected error occured while saving your progress",
-                        {
-                          position: "bottom-center",
-                        }
-                      )
-                    })
-
+                  done={(selected, correct) => {
                     const temp = results.slice()
                     temp.push(selected)
+                    let tempCorrect = correctCnt;
+                    if (correct) tempCorrect++;
+                    setCorrectCnt(tempCorrect);
+                    console.log("temp", temp)
                     setResults(temp)
                     setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
-                      return setDone(true)
-                    }
+                      const correct = tempCorrect;
+                      const accuracy = Math.round((correct / (q+1)) * 100)
+                      // console.log(temp, correct, q+1, accuracy)
+                       fetch("/api/sets/progress", {
+                         method: "POST",
+                         body: JSON.stringify({
+                           id: set,
+                           accuracy,
+                         }),
+                       }).then((res) => {
+                          res.json().then((data) => {
+                            if (data.error) {
+                              toast.error(data.error)
+                            } else {
+                              toast.success("You now have " + data.points + " points on this lesson!");
+                              setDone(true)
+                            }
+                          });
+                        });
+                     }
                   }}
                 />
               </Card>

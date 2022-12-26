@@ -83,7 +83,7 @@ const Input = styled.div`
   margin-bottom: 20px;
   max-height: 170px; /* the input auto grows, but not more than 4 rows */
   overflow: auto;
-  
+
   :focus {
     border-bottom: 6px solid var(--color-gold);
   }
@@ -168,9 +168,23 @@ export default function Question({ data, update, remove }) {
   const name = `q__radio_${data.id}`
 
   console.log("cur:", cur)
-  
+
   return (
     <Group onBlur={() => update(data.id, cur)}>
+            <Input
+        placeholder="Your prompt..."
+        contentEditable="plaintext-only"
+        suppressContentEditableWarning={true}
+        onChange={e => {
+          console.log("Change:", e.target.innerText)
+        }}
+        onBlur={e => {
+          setCur({
+           ...cur,
+            prompt: e.target.innerText
+          })
+        }}
+      >{data.prompt}</Input>
       <Input
         placeholder="Your question..."
         contentEditable="plaintext-only"
@@ -185,8 +199,54 @@ export default function Question({ data, update, remove }) {
           })
         }}
       >{data.question}</Input>
+
+      <input type="checkbox" value={data.questionAudio} onChange={
+        (e) => {
+          if(e.target.checked) {
+            setCur({
+              ...cur,
+              questionAudio: true
+            })
+          } else {
+            setCur({
+              ...cur,
+              questionAudio: false,
+              showQuestion: true
+            })
+          }
+        }
+      } id="audioQ"/>
+      <label htmlFor="audioQ">Question Audio</label>
+
+      <br/>
+
+      <input type="checkbox" value={data.answerAudio} onChange={(e) => {
+        if(e.target.checked) {
+          setCur({
+            ...cur,
+            answerAudio: true
+          })
+        } else {
+          setCur({
+            ...cur,
+            answerAudio: false
+          })
+        }
+      }} id="audioA"/>
+            <label htmlFor="audioA">Answer Audio</label>
+            <br/>
+      <input type="checkbox" disabled={cur.questionAudio ? false : true} checked={cur.showQuestion} key={Math.random()} onChange={(e) => {
+        setCur({
+          ...cur,
+          showQuestion: e.target.checked
+        })
+        update(data.id, cur)
+      }} id="showQ"/>
+
+      <label htmlFor="showQ" >Show Question</label>
+
       <OptionGroup ref={parent} style={{
-        display: data.answers.length === 2 ? "flex" : "" 
+        display: data.answers.length === 2 ? "flex" : ""
       }} onChange={e => {
         const correct = +e.target.value
         if(isNaN(correct)) return
@@ -244,9 +304,11 @@ export default function Question({ data, update, remove }) {
             setCur({ ...cur, answers: temp.slice(0, -1) })
           }}>-</Amount>
         </Questions>
+        {data.last ? (
         <Delete title="Delete question" onClick={() => remove(data.id)}>
           <Trash size={18} color="red" />
         </Delete>
+        ) : null}
       </Underhang>
     </Group>
   )

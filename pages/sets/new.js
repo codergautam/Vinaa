@@ -21,12 +21,12 @@ const Content = styled.div`
 
 const Card = styled.div`
   display: flex;
-  gap: 30vh;
+  gap: 10vh;
   height: 100%;
   flex-direction: column;
   align-items: center;
   background-color: rgba(254, 221, 126, 0.1);
-  padding: 30vh 30%;
+  padding: 10vh 30%;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
@@ -36,10 +36,10 @@ const Card = styled.div`
   }
 
   @media (max-width: 1400px) {
-    padding: 30vh 10%;
+    padding: 10vh 10%;
   }
   @media (max-width: 800px) {
-    padding: 30vh 5%;
+    padding: 10vh 5%;
   }
 `
 
@@ -86,7 +86,7 @@ export default function New() {
   const [questions, setQuestions] = useState([])
   const [parent] = useAutoAnimate()
   const [loading, setLoading] = useState(false)
-  
+
   // this is to enable access in the beforeunload event
   // because you can't access state in beforeunload
   const data = useRef({ questions, name })
@@ -113,12 +113,20 @@ export default function New() {
 
   const updateQuestion = (index, data) => {
     const temp = questions.slice()
-    temp[index] = data
+    if(temp[index]) temp[index] = data
+    if(temp.length > 0) temp[temp.length - 1].last = true
+
     setQuestions(temp)
   }
   const remove = index => {
     const temp = questions.slice()
     temp.splice(index, 1)
+    for(let i = index; i < temp.length; i++) {
+      temp[i].id--
+    }
+    if(temp.length > 0) {
+    temp[temp.length - 1].last = true
+    }
     setQuestions(temp)
   }
   const newQuestion = () => {
@@ -153,7 +161,15 @@ export default function New() {
         }
       ],
       id: questions.length,
+      prompt: "",
+      questionAudio: false,
+      answerAudio: false,
+      showQuestion: true,
     })
+    if(temp.length > 0) {
+    temp[temp.length - 1].last = true
+    if(temp.length > 1) temp[temp.length - 2].last = false
+    }
     setQuestions(temp)
   }
 
@@ -177,13 +193,16 @@ export default function New() {
             if(!q.question.length) {
               return toaster(`Question ${i + 1} must have question text`)
             }
+            if(!q.prompt.length) {
+              return toaster(`Question ${i + 1} must have prompt text`)
+            }
             if(q.answers.length < 2 || q.answers.length > 4) {
               return toaster(`Question ${i + 1} must have between 2 and 4 answers`)
             }
             let hasCorrect = false
             for(const a of q.answers) {
               if(!a.label.length) {
-                return toaster(`The answer field for question ${i + 1} cannot be empty`)
+                return toaster(`An answer field for question ${i + 1} cannot be empty`)
               }
               if(a.correct && hasCorrect) {
                 return toaster("Wait, why are you messing with me?")
@@ -196,31 +215,35 @@ export default function New() {
               return toaster(`Question ${i + 1} must have one correct answer`)
             }
 
-            const res = await fetch("/api/sets/new", {
-              method: 'POST',
-              headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({ questions, name })
-            })
-            const data = await res.json()
 
-            if(res.status !== 200) {
-              return toast.error(data.message, {
-                position: "bottom-center"
-              })
-            }
+          }
 
-            // remove saved data on successful set creation
-            localStorage.removeItem("newset__data")
-            
-            toast.success("Set created...", {
+          const res = await fetch("/api/sets/new", {
+            method: 'POST',
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ questions, name })
+          })
+          const data = await res.json()
+
+          if(res.status !== 200) {
+            return toast.error(data.message, {
               position: "bottom-center"
             })
-            Router.push("/sets/" + data.id)
           }
+
+          // remove saved data on successful set creation
+          localStorage.removeItem("newset__data")
+
+          toast.success("Set created...", {
+            position: "bottom-center"
+          })
+          Router.push("/sets/" + data.id)
         }} loading={loading}>
+
+
           {loading ? <Spinner /> : "Publish"}
         </Header>
         <Card ref={parent}>

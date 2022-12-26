@@ -65,8 +65,8 @@ const YouSaid = styled.div`
 
 export default function Results({ data, results }) {
   const { wrong, correct } = res(data, results)
-  const accuracy = (correct / data.questions.length) * 100
-  
+  const accuracy = Math.round((correct / data.questions.length) * 100)
+
   return (
     <Wrapper>
       <Content>
@@ -115,6 +115,10 @@ function res(data, results) {
       correct++
       continue
     }
+
+    console.log("hmm", question.answers)
+    console.log("hmmm", results, results[i], i);
+    console.log(question.answers[results[i]]);
     messedUp.push({
       question: question.question,
       chose: question.answers[results[i]].label,

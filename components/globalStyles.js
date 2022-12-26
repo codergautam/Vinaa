@@ -17,14 +17,11 @@ html {
   font-family: 'Open Sans', sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4 {
+.upper {
   text-transform: uppercase;
 }
 
-/* 
+/*
 * The following is a CSS reset to make the page easier to work with
 * This makes it a lot easier to add new features and styles
 */

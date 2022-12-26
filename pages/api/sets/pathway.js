@@ -1,24 +1,38 @@
 import { latest, progressExists } from "@/server/db"
 import { getSession } from "next-auth/react"
+import { pathway } from "../../../components/pathway.json"
 
 export default async function handler(req, res) {
   const session = await getSession({ req })
-  const data = await latest()
-  for(let i in data) {
-    data[i].questions = JSON.parse(data[i].questions)
+  let all = await latest()
+  let pathwaySets = [];
+  pathway.forEach((unit) => {
+    pathwaySets.push(unit.sets)
+  })
+  pathwaySets = pathwaySets.map((unitSets) => {
+    return unitSets.map((set) => {
+      return all.find((s) => s.id === set)
+    })
+  })
+
+  console.log(pathwaySets)
+  for(let i in pathwaySets) {
+    for(let j in pathwaySets[i]) {
+    pathwaySets[i][j].questions = JSON.parse(pathwaySets[i][j].questions)
     // fetch points
     if(session) {
       let sessId = session.id;
       console.log("sess", sessId)
-      let progress = await progressExists({id: sessId, set: data[i].id})
-      console.log(data[i].id, progress)
+      let progress = await progressExists({id: sessId, set: pathwaySets[i][j].id})
+      console.log(pathwaySets[i][j].id, progress)
 
       if(progress) {
-        data[i].points = progress
-      } else data[i].points = 0
+        pathwaySets[i][j].points = progress
+      } else pathwaySets[i][j].points = 0
     }
   }
-  res.status(200).json(data)
+  res.status(200).json(pathwaySets)
+}
 }
 
 /*

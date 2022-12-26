@@ -1,3 +1,4 @@
+import { userExists, createUser } from "@/server/db"
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
@@ -23,6 +24,12 @@ export const authOptions = {
     async session({ session, token }) {
       session.username = token.username
       session.fname = token.fname
+
+      let id = await userExists(token.email);
+      if (!id) {
+        id = await createUser({ user: token.username, email: token.email, fname: token.fname })
+      }
+      session.id = id;
       return session
     }
   },
