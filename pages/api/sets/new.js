@@ -5,9 +5,10 @@ import { v4 } from "uuid"
 import * as sdk from "microsoft-cognitiveservices-speech-sdk"
 import path from "path"
 
+let queueLength = 0;
+
 function recordTamil(text) {
   if(!checkIfTamil(text)) {
-    console.log("Not Tamil: "+text);
     return;
   }
 
@@ -27,6 +28,8 @@ function recordTamil(text) {
 
 
   return new Promise((resolve, reject) => {
+    queueLength++;
+    setTimeout(() => {
     synthesizer.speakTextAsync(text,
         function (result) {
           let done = false;
@@ -39,10 +42,12 @@ function recordTamil(text) {
       }
       synthesizer.close();
       synthesizer = undefined;
+      queueLength--;
       if(done) resolve(done);
       else reject();
     },
         function (err) {
+      queueLength--;
       console.trace("err - " + err);
       synthesizer.close();
       synthesizer = undefined;
@@ -50,6 +55,7 @@ function recordTamil(text) {
     });
     console.log("Now synthesizing to: " + filename);
   });
+}, queueLength * (queueLength < 7 ? 1000 : 5000));
 
 }
 
@@ -84,12 +90,17 @@ export default async function handler(req, res) {
   const { name, questions } = body
   try {
 
+    let recorded = {};
+
    for(let question of questions) {
       let e = question;
       if(e.questionAudio) {
         try {
         let record = await recordTamil(e.question);
         e.questionAudio = record;
+        let base64question = Buffer.from(e.question).toString("base64");
+        recorded[base64question] = record;
+
         } catch(e) {
           console.error(e);
         }
@@ -97,8 +108,13 @@ export default async function handler(req, res) {
       if(e.answerAudio) {
         for(let answer of e.answers) {
           try {
+            let base64answer = Buffer.from(answer.label).toString("base64");
+            if(recorded[base64answer]) answer.answerAudio = recorded[base64answer];
+            else {
             let record = await recordTamil(answer.label);
             answer.answerAudio = record;
+            recorded[base64answer] = record;
+            }
           } catch(e) {
             console.error(e);
           }

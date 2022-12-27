@@ -116,7 +116,6 @@ function res(data, results) {
       continue
     }
 
-    console.log(question.answers[results[i]]);
     messedUp.push({
       question: (question.prompt??"")+question.question,
       chose: question.answers[results[i]].label,

@@ -179,7 +179,6 @@ export default function Question({ data, update, remove }) {
         contentEditable="plaintext-only"
         suppressContentEditableWarning={true}
         onChange={e => {
-          console.log("Change:", e.target.innerText)
         }}
         onBlur={e => {
           setCur({
@@ -193,7 +192,6 @@ export default function Question({ data, update, remove }) {
         contentEditable="plaintext-only"
         suppressContentEditableWarning={true}
         onChange={e => {
-          console.log("Change:", e.target.innerText)
         }}
         onBlur={e => {
           setCur({

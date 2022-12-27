@@ -23,14 +23,13 @@ const UnitCard = styled.div`
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
-  
+
 `
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Sets() {
   const router = useRouter()
   const { data, error } = useSWR("/api/sets/pathway", fetcher)
-  console.log(data)
 
   if (error) {
     console.error(error);

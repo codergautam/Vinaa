@@ -58,7 +58,6 @@ export default function Question({
 
   useEffect(() => {
     // selected has changed
-    console.log("selected changed", selected)
     if(selected && data.answers[selected].answerAudio) {
 
       // play audio

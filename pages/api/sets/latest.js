@@ -9,9 +9,7 @@ export default async function handler(req, res) {
     // fetch points
     if(session) {
       let sessId = session.id;
-      console.log("sess", sessId)
       let progress = await progressExists({id: sessId, set: data[i].id})
-      console.log(data[i].id, progress)
 
       if(progress) {
         data[i].points = progress

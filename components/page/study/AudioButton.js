@@ -11,7 +11,6 @@ export default function AudioButton({ src, ...props }) {
   const [playing, setPlaying] = useState(false)
   const [audio, setAudio] = useState(new Audio(src))
 
-  console.log(src)
 
   // Increase volume 200% need to use gainNode
 
@@ -34,7 +33,6 @@ export default function AudioButton({ src, ...props }) {
   function play() {
     if(playing) {
       audio.pause()
-      console.log("Pause")
     }
     audio.currentTime = 0;
     audio.play()
