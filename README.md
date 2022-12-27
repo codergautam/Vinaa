@@ -7,6 +7,8 @@ First, you need to set the necessary environment variables:
 + `GOOGLE_CLIENT_SECRET` - Google client secret
 + `NEXTAUTH_SECRET` - A random string, preferably 16 bytes, used to hash JWTs (handled by the [`next-auth`](https://npmjs.com/package/next-auth) package)
 + `NEXTAUTH_URL` - set this to your project's domain (or you will be redirected incorrectly)
++ `SUBSCRIPTION_KEY` - the subscription key for the Microsoft Speech API (used for tamil audio)
++ `ADMINS` - a JSON array of admin emails (e.g. `["email@example.com']`)
 
 For production:
 ```shell

@@ -66,7 +66,7 @@ const LatestSetsLabel = styled.h3`
   margin-top: 18px;
   margin-bottom: 10px;
 `
-const admins = ["gautamgxtv@gmail.com"]
+const admins = JSON.parse(process.env.ADMINS)
 export async function getServerSideProps({ req, res }) {
   const session = await getServerSession(req, res)
   if(session && !admins.includes(session.user.email)) {
