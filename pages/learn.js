@@ -66,13 +66,12 @@ const LatestSetsLabel = styled.h3`
   margin-bottom: 10px;
 `
 
-export default function Learn() {
+export default function Learn(props) {
   const { data: session } = useSession()
-
   return (
     <Wrapper>
       <PageTitle title="Learn" />
-      <Navbar name={session.fname}/>
+      <Navbar name={session.fname} admin={props.admin}/>
       <Content>
         <Pathway/>
       </Content>

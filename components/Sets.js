@@ -24,7 +24,6 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 export default function Sets() {
   const router = useRouter()
   const { data, error } = useSWR("/api/sets/latest", fetcher)
-  console.log(data)
 
   if (error) {
     console.error(error);

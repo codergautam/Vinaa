@@ -22,10 +22,7 @@ export default async function handler(req, res) {
     // fetch points
     if(session) {
       let sessId = session.id;
-      console.log("sess", sessId)
       let progress = await progressExists({id: sessId, set: pathwaySets[i][j].id})
-      console.log(pathwaySets[i][j].id, progress)
-
       if(progress) {
         pathwaySets[i][j].points = progress
       } else pathwaySets[i][j].points = 0

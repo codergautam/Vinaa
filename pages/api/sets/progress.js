@@ -33,7 +33,6 @@ export default async function handler(req, res) {
       })
 
       const session = await getSession({ req })
-      console.log(session)
       if(!session.id) return res.status(401).json({
         message: "Unauthorized"
       })

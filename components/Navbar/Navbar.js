@@ -65,21 +65,37 @@ const DropDownContent = styled.div`
 
 export default function Navbar(props) {
   let [hover, setHover] = useState(false)
+
   return (
     <div>
       <Nav>
           <LogoText/>
+
           <UserItem onClick={()=>{setHover(!hover)}}>
             <span >{props.name}</span>
 
           </UserItem>
 
 
+
       </Nav>
+
+
       <DropDownContent style={{display:hover?"inline-block":"none", textAlign: "center", transform: 'translate(-20px,-10px)'}} onMouseEnter={()=>{setHover(true)}}>
 
         <Link style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%'}} onClick={() => {signOut({callbackUrl: '/'})}}>Logout</Link>
       </DropDownContent>
+
+      {
+        props.admin ? (
+          <div>
+          <a href="/admin/listsets" style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%', transform: 'translate(-20px,-10px)'}}>[Admin] View Sets</a>
+         <br/>
+          <a href="/sets/new" style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%', transform: 'translate(-20px,-10px)'}}>[Admin] New set</a>
+
+          </div>
+        ) : null
+      }
 
 
     </div>
