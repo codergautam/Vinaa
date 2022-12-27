@@ -76,7 +76,7 @@ export default function Navbar(props) {
 
 
       </Nav>
-      <DropDownContent style={{display:hover?"inline-block":"none", textAlign: "center", transform: 'translate(0,-10px)'}} onMouseEnter={()=>{setHover(true)}}>
+      <DropDownContent style={{display:hover?"inline-block":"none", textAlign: "center", transform: 'translate(-20px,-10px)'}} onMouseEnter={()=>{setHover(true)}}>
 
         <Link style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%'}} onClick={() => {signOut({callbackUrl: '/'})}}>Logout</Link>
       </DropDownContent>

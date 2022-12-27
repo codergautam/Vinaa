@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import Button from "@/components/Button"
+import AudioButton from "./AudioButton"
 
 const Wrapper = styled.div`
   padding: 30px 40px;
@@ -16,7 +17,6 @@ const Wrapper = styled.div`
 `
 const Ask = styled.p`
   font-size: 2rem;
-  margin-bottom: 20px;
 `
 
 const Options = styled.div`
@@ -56,6 +56,18 @@ export default function Question({
   const [parent] = useAutoAnimate()
 
   useEffect(() => {
+    // selected has changed
+    console.log("selected changed", selected)
+    if(selected && data.answers[selected].answerAudio) {
+
+      // play audio
+      const audio = new Audio("/audio/"+data.answers[selected].answerAudio+".wav")
+      audio.play()
+
+    }
+  }, [selected]);
+
+  useEffect(() => {
     setSelected()
   }, [data?.id])
   let correctIndex = 0
@@ -74,7 +86,18 @@ export default function Question({
   if(data) {
   return (
     <Wrapper ref={parent}>
+      <center>
+      <Ask>{data.prompt}</Ask>
+      {data.questionAudio ? (
+        <div>
+        <AudioButton src={"/audio/"+data.questionAudio+".wav"} />
+        <br/>
+        <br/>
+        </div>
+      ) : (
       <Ask>{data.question}</Ask>
+      )}
+      </center>
       <Options>
         {data.answers.map(answer => {
           const styles = {};

@@ -116,11 +116,9 @@ function res(data, results) {
       continue
     }
 
-    console.log("hmm", question.answers)
-    console.log("hmmm", results, results[i], i);
     console.log(question.answers[results[i]]);
     messedUp.push({
-      question: question.question,
+      question: (question.prompt??"")+question.question,
       chose: question.answers[results[i]].label,
       correct: question.answers[correctIndex].label
     })

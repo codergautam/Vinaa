@@ -193,9 +193,6 @@ export default function New() {
             if(!q.question.length) {
               return toaster(`Question ${i + 1} must have question text`)
             }
-            if(!q.prompt.length) {
-              return toaster(`Question ${i + 1} must have prompt text`)
-            }
             if(q.answers.length < 2 || q.answers.length > 4) {
               return toaster(`Question ${i + 1} must have between 2 and 4 answers`)
             }

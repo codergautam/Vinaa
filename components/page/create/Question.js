@@ -173,6 +173,9 @@ export default function Question({ data, update, remove }) {
     <Group onBlur={() => update(data.id, cur)}>
             <Input
         placeholder="Your prompt..."
+        style={{
+          display: cur.questionAudio ? "block" : "none"
+        }}
         contentEditable="plaintext-only"
         suppressContentEditableWarning={true}
         onChange={e => {
@@ -186,7 +189,7 @@ export default function Question({ data, update, remove }) {
         }}
       >{data.prompt}</Input>
       <Input
-        placeholder="Your question..."
+        placeholder={"Your question... "+(cur.questionAudio ? "(Audio)" : "")+(cur.showQuestion ? "" : " (Hidden)")}
         contentEditable="plaintext-only"
         suppressContentEditableWarning={true}
         onChange={e => {

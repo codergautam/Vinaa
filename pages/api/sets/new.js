@@ -1,6 +1,62 @@
 import { nanoid } from "nanoid"
 import { API } from "@/server/protected"
 import { createSet } from "@/server/db"
+import { v4 } from "uuid"
+import * as sdk from "microsoft-cognitiveservices-speech-sdk"
+import path from "path"
+
+function recordTamil(text) {
+  if(!checkIfTamil(text)) {
+    console.log("Not Tamil: "+text);
+    return;
+  }
+
+  const id = v4();
+
+  let subscriptionKey = process.env.SUBSCRIPTION_KEY;
+  let serviceRegion = "eastus";
+  let filename = path.join(process.cwd(), "public", "audio", id+".wav");
+
+  let audioConfig = sdk.AudioConfig.fromAudioFileOutput(filename);
+  let speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKey, serviceRegion);
+
+  speechConfig.speechSynthesisLanguage = "ta-IN";
+  speechConfig.speechSynthesisVoiceName = "ta-IN-PallaviNeural";
+
+  let synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig);
+
+
+  return new Promise((resolve, reject) => {
+    synthesizer.speakTextAsync(text,
+        function (result) {
+          let done = false;
+      if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
+        console.log("recorded "+text );
+        done = id;
+      } else {
+        console.error("Speech synthesis canceled, " + result.errorDetails +
+            "\nDid you update the subscription info?");
+      }
+      synthesizer.close();
+      synthesizer = undefined;
+      if(done) resolve(done);
+      else reject();
+    },
+        function (err) {
+      console.trace("err - " + err);
+      synthesizer.close();
+      synthesizer = undefined;
+      reject();
+    });
+    console.log("Now synthesizing to: " + filename);
+  });
+
+}
+
+function checkIfTamil(text) {
+  // Regex: ^[\u0B80-\u0BFF]+$
+  return /^[\u0B80-\u0BFF]+$/.test(text.split("").filter((c) => c !== " ").join(""));
+}
 
 export default async function handler(req, res) {
   const user = await API(req, res)
@@ -26,8 +82,32 @@ export default async function handler(req, res) {
 
   const id = nanoid(8)
   const { name, questions } = body
-  console.log("q:", body.questions)
   try {
+
+   for(let question of questions) {
+      let e = question;
+      if(e.questionAudio) {
+        try {
+        let record = await recordTamil(e.question);
+        e.questionAudio = record;
+        } catch(e) {
+          console.error(e);
+        }
+      }
+      if(e.answerAudio) {
+        for(let answer of e.answers) {
+          try {
+            let record = await recordTamil(answer.label);
+            answer.answerAudio = record;
+          } catch(e) {
+            console.error(e);
+          }
+        }
+      }
+    }
+
+    console.log("q:", questions)
+
     await createSet({ id, name, questions, user: user.username })
     res.status(200).json({
       "id": id
@@ -54,12 +134,18 @@ function validate(name, questions) {
     const q = questions[i]
     if (!q.question.length)
       return `Question ${i + 1} must have question text`
-    if (!q.prompt.length)
-      return `Question ${i + 1} must have prompt text`
+
+    if(q.questionAudio && !checkIfTamil(q.question)) {
+      return `Question ${i + 1} must be in Tamil text to enable question audio`
+    }
+
     if (q.answers.length < 2 || q.answers.length > 4)
       return `Question ${i + 1} must have between 2 and 4 answers`
     let hasCorrect = false
     for (const a of q.answers) {
+      if(q.answerAudio && !checkIfTamil(a.label)) {
+        return `Answer for question ${i + 1} must be in Tamil text to enable answer audio`
+      }
       if (!a.label.length)
         return `An answer field for question ${i + 1} cannot be empty`
       if (a.correct && hasCorrect)
