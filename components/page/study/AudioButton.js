@@ -9,17 +9,22 @@ function amplifyMedia(mediaElem, multiplier) {
 
 export default function AudioButton({ src, ...props }) {
   const [playing, setPlaying] = useState(false)
-  const [audio] = useState(new Audio(src))
+  const [audio, setAudio] = useState(new Audio(src))
 
+  console.log(src)
 
   // Increase volume 200% need to use gainNode
 
+  useEffect(() => {
+    setAudio(new Audio(src))
+  }, [src])
 
   useEffect(() => {
 
     audio.addEventListener("ended", () => {
       setPlaying(false)
     })
+    play()
   }, [audio])
 
   useEffect(() => {

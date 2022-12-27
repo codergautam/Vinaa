@@ -54,6 +54,7 @@ export default function Question({
 }) {
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()
+  const [questionAudio, setQuestionAudio] = useState("")
 
   useEffect(() => {
     // selected has changed
@@ -69,7 +70,10 @@ export default function Question({
 
   useEffect(() => {
     setSelected()
+    if(data?.questionAudio) setQuestionAudio("/audio/"+data.questionAudio+".wav")
   }, [data?.id])
+
+2
   let correctIndex = 0
 
   if(data) {
@@ -88,9 +92,9 @@ export default function Question({
     <Wrapper ref={parent}>
       <center>
       <Ask>{data.prompt}</Ask>
-      {data.questionAudio ? (
+      {questionAudio ? (
         <div>
-        <AudioButton src={"/audio/"+data.questionAudio+".wav"} />
+        <AudioButton src={questionAudio} />
         <br/>
         <br/>
         </div>
