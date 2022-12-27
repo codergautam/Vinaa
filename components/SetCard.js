@@ -65,7 +65,11 @@ return (
       {/* <SetCreator href={"/user/" + set.user}>{set.user}</SetCreator> */}
       {/* <SetQuestions>{set.questions.length} question{set.questions.length - 1 ? "s" : ""}</SetQuestions> */}
       <SetPoints>{set.points} point{(set.points) - 1 ? "s" : ""}</SetPoints>
+      {
+        props.showId ? (
       <SetPoints>ID: {set.id}</SetPoints>
+          ) : null
+      }
 
     </SetInfo>
   </Set>

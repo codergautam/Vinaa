@@ -35,7 +35,7 @@ export default function Sets() {
   return (
     <SetGroup>
       {data.map(set => (
-        <SetCard set={set} key={set.id} />
+        <SetCard set={set} key={set.id} showId={true} />
         )
       )}
     </SetGroup>
