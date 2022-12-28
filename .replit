@@ -1,4 +1,4 @@
-run = ["npm", "run", "dev"]
+run = ["npm", "start"]
 entrypoint = "pages/index.js"
 
 hidden = [".config", ".next"]
