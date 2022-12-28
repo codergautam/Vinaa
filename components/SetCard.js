@@ -51,6 +51,7 @@ white-space: nowrap;
 
 export default function SetCard(props) {
 const { set } = props
+let resource = set.questions[0].text;
 return (
   <Set key={set.id} onClick={e => {
     // if the user is trying to click on the creator of the set
@@ -58,7 +59,7 @@ return (
     // if(e.target.tagName !== "A")
     //   router.push("/sets/" + set.id);
   }}>
-    <SetTitle href={"/sets/" + set.id}>
+    <SetTitle href={(resource?"/resources/":"/sets/") + set.id}>
       {set.name}
     </SetTitle>
     <SetInfo>

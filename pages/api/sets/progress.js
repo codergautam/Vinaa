@@ -13,10 +13,9 @@ import {
 } from "@/server/protected"
 import { getSession } from "next-auth/react"
 import {
-  createProgress,
-  updateProgress,
   getProgress,
-  setProgress
+  setProgress,
+  finishResource
 } from "@/server/db"
 
 export default async function handler(req, res) {
@@ -38,10 +37,25 @@ export default async function handler(req, res) {
       })
 
     try {
-      const { id, accuracy } = JSON.parse(req.body)
+      const { id, accuracy, done } = JSON.parse(req.body)
 
-      if(!id || accuracy === undefined) return res.status(400).json({
-        message: "Missing setId or accuracy"
+
+      if(!id) return res.status(400).json({
+        message: "Missing setId"
+      })
+
+      if(done) {
+
+        // Resource done
+        let alreadyCompleted = await finishResource({ id, user: session.id })
+        return res.status(200).json({
+          message: "Resource completed",
+          alreadyCompleted
+        })
+
+      } else {
+      if(accuracy === undefined) return res.status(400).json({
+        message: "Missing accuracy"
       })
 
       if(isNaN(accuracy) || accuracy < 0 || accuracy > 100) return res.status(400).json({
@@ -55,6 +69,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         points: newPoints
       })
+    }
 
 
     } catch (e) {

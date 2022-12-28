@@ -66,12 +66,16 @@ const YouSaid = styled.div`
 export default function Results({ data, results }) {
   const { wrong, correct } = res(data, results)
   const accuracy = Math.round((correct / data.questions.length) * 100)
+  let resource = data.questions[0].question ? false : true;
 
   return (
     <Wrapper>
       <Content>
         <Title>All done!</Title>
+
+        {!resource ? (
         <Note>You scored <Percent>{accuracy}%</Percent> on your last attempt.</Note>
+        ) : null}
         {wrong.length ? (
           <Wrongs>
             {wrong.map(({ question, chose, correct }, id) => (
@@ -90,7 +94,8 @@ export default function Results({ data, results }) {
           </Wrongs>
         ) : <p>Great job!</p>}
         <Button onClick={() => window.location.reload()}>
-          Try again
+
+          {resource ? "Review Again" : "Try again"}
         </Button>
       </Content>
     </Wrapper>
@@ -101,6 +106,9 @@ function res(data, results) {
   const messedUp = []
   let correct = 0
 
+
+
+  if(data.questions[0].question) {
   for(let i = 0; i < data.questions.length; i++) {
     const question = data.questions[i]
     let correctIndex
@@ -122,6 +130,7 @@ function res(data, results) {
       correct: question.answers[correctIndex].label
     })
   }
+}
 
   return { wrong: messedUp, correct }
 }

@@ -92,7 +92,8 @@ export default function Navbar(props) {
           <a href="/admin/listsets" style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%', transform: 'translate(-20px,-10px)'}}>[Admin] View Sets</a>
          <br/>
           <a href="/sets/new" style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%', transform: 'translate(-20px,-10px)'}}>[Admin] New set</a>
-
+          <br/>
+          <a href="/resources/new" style={{position: "fixed", borderRadius: "10px", textAlign:"center", boxShadow:" 0px 8px 16px 0px rgba(0, 0, 0, 0.2);", backgroundColor: "white", width: '100%', transform: 'translate(-20px,-10px)'}}>[Admin] New resource</a>
           </div>
         ) : null
       }

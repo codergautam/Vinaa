@@ -108,6 +108,16 @@ export function setProgress({ id, user, points }) {
   })
 }
 
+export async function finishResource({ id, user }) {
+  let current = await progressExists({set: id, id: user});
+  if(current) {
+    return true
+  } else {
+    await setProgress({id, user, points: 500});
+    return false
+  }
+};
+
 export function latest() {
   return new Promise((resolve, reject) => {
     db.all("SELECT * FROM sets ORDER BY ROWID DESC LIMIT 6", (err, rows) => {
