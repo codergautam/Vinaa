@@ -26,10 +26,6 @@ export default function AudioButton({ src, ...props }) {
     play()
   }, [audio])
 
-  useEffect(() => {
-    play()
-  }, [])
-
   function play() {
     if(playing) {
       audio.pause()
