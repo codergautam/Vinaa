@@ -37,6 +37,7 @@ export default function AudioButton({ src, ...props }) {
     if(playing) {
       audio.pause()
     }
+    audio.load();
     audio.currentTime = 0;
     audio.play()
   }
