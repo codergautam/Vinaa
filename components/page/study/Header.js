@@ -16,6 +16,10 @@ const Bar = styled.header`
 const Title = styled.h2`
   font-weight: normal;
   margin-left: 30px;
+  font-size: 1.5em;
+  @media screen and (max-width: 480px) {
+  font-size: 0.75rem;
+}
 `
 
 function useWindowSize() {
@@ -56,8 +60,8 @@ export default function Header({ title, id }) {
   return (
     <>
       <Bar>
-        <Button secondary href="/learn">&larr; Back</Button>
-        <Title>Set: {title}</Title>
+        <Button style={{fontSize: size.width < 400 ? "10px" : "15px"}} secondary href="/learn">&larr; Back</Button>
+        <Title>{title}</Title>
         <LogoText size={size.width < 400 ? "20px" : "30px"}/>
       </Bar>
       {modal ? <Progress close={() => setModal(false)} set={id} /> : null}

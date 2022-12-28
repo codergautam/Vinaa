@@ -7,7 +7,7 @@ import { faBook } from "@fortawesome/free-solid-svg-icons"
 
 const Set = styled.div`
 cursor: pointer;
-height: 5em;
+height: fit-content;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
@@ -22,6 +22,10 @@ text-decoration: none;
 color: var(--color-gray);
 font-size: 1.5rem;
 text-align: center;
+
+@media screen and (max-width: 480px) {
+  font-size: 1rem;
+}
 `
 const SetInfo = styled.div`
 display: flex;
@@ -47,6 +51,10 @@ color: #737373;
 text-overflow: ellipsis;
 overflow: hidden;
 white-space: nowrap;
+font-size: 1rem;
+@media screen and (max-width: 480px) {
+  font-size: 0.75rem;
+}
 `
 
 export default function SetCard(props) {
