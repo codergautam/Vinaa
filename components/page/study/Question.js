@@ -55,14 +55,20 @@ export default function Question({
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()
   const [questionAudio, setQuestionAudio] = useState("")
+  // let answerAudios = [];
+  const [answerAudios, setAnswerAudios] = useState([]);
+
+  useEffect(() => {
+    if(!data?.answers) return;
+    setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/audio/"+answer.answerAudio+".wav") : null));
+  }, [data?.answers]);
 
   useEffect(() => {
     // selected has changed
-    if(selected !== undefined && data.answers[selected].answerAudio) {
+    if(selected !== undefined && answerAudios[selected]) {
 
       // play audio
-      const audio = new Audio("/audio/"+data.answers[selected].answerAudio+".wav")
-      audio.play()
+      answerAudios[selected].play()
 
     }
   }, [selected]);
