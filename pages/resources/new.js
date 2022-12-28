@@ -165,7 +165,7 @@ export default function New() {
             i = +i // convert i to number
             const q = questions[i]
             if(!q.text.length) {
-              return toaster(`Question ${i + 1} must have question text`)
+              return toaster(`Page ${i + 1} must have page text`)
             }
           }
 
