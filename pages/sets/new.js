@@ -130,8 +130,8 @@ export default function New() {
     setQuestions(temp)
   }
   const newQuestion = () => {
-    if(questions.length === 100) {
-      return toast.error("A set may not have more than 100 questions", {
+    if(questions.length === 20) {
+      return toast.error("A set may not have more than 20 questions", {
         position: "bottom-left"
       })
     }

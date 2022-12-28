@@ -58,7 +58,7 @@ export default function Question({
 
   useEffect(() => {
     // selected has changed
-    if(selected && data.answers[selected].answerAudio) {
+    if(selected !== undefined && data.answers[selected].answerAudio) {
 
       // play audio
       const audio = new Audio("/audio/"+data.answers[selected].answerAudio+".wav")

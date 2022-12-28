@@ -26,7 +26,7 @@ const Set = styled.span`
     color: black;
   }
   :empty:before {
-    content: "Set name";
+    content: "Set/Resource Name";
     color: rgba(0, 0, 0, 0.6);
     width: 100px;
     pointer-events: none;
