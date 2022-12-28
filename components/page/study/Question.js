@@ -67,6 +67,9 @@ export default function Question({
     // selected has changed
     if(selected !== undefined && answerAudios[selected]) {
 
+      // dont play if correct answer
+      if(data.answers[selected].correct) return;
+      
       // play audio
       answerAudios[selected].play()
 
