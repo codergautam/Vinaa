@@ -13,11 +13,9 @@ const Wrapper = styled.div`
   @media (max-width: 800px) {
     width: 95%;
   }
+  background-color: lightgray;
+  border-radius: 30px;
 `
-const Ask = styled.p`
-  font-size: 2rem;
-`
-
 export default function Page({
   data,
   done,
@@ -38,11 +36,10 @@ export default function Page({
   return (
     <Wrapper ref={parent}>
       <center>
+        <h2>Page {data.id+1}</h2>
 
 {/* markdown */}
-        <Ask>
           <ReactMarkdown>{data.text}</ReactMarkdown>
-        </Ask>
 
       </center>
         <Button onClick={() => done()}>

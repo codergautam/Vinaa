@@ -18,7 +18,6 @@ export default function AudioButton({ src, ...props }) {
     if(!src) return
     // get relative link audio.src
     let relativeLink = audio?.src?.replace(window.location.origin, "")
-    console.log(relativeLink, src)
     if(src == relativeLink) return
     setAudio(new Audio(src))
   }, [src])
@@ -28,7 +27,10 @@ export default function AudioButton({ src, ...props }) {
     audio.addEventListener("ended", () => {
       setPlaying(false)
     })
+    audio.currentTime = 0;
+    setTimeout(() => {
     play()
+    }, 200)
   }, [audio])
 
   function play() {
