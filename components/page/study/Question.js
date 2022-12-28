@@ -114,7 +114,7 @@ export default function Question({
               styles.border = "2px solid var(--color-red)"
               styles.color = "white"
             }
-          } else if(selected && answer.id === correctIndex) {
+          } else if(selected !== undefined && answer.id === correctIndex) {
             styles.backgroundColor = "var(--color-green)"
             styles.border = "2px solid var(--color-green)"
             styles.color = "white"
