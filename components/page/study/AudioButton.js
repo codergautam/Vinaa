@@ -9,17 +9,22 @@ function amplifyMedia(mediaElem, multiplier) {
 
 export default function AudioButton({ src, ...props }) {
   const [playing, setPlaying] = useState(false)
-  const [audio, setAudio] = useState(new Audio(src))
+  const [audio, setAudio] = useState(null)
 
 
   // Increase volume 200% need to use gainNode
 
   useEffect(() => {
+    if(!src) return
+    // get relative link audio.src
+    let relativeLink = audio?.src?.replace(window.location.origin, "")
+    console.log(relativeLink, src)
+    if(src == relativeLink) return
     setAudio(new Audio(src))
   }, [src])
 
   useEffect(() => {
-
+    if(!audio) return
     audio.addEventListener("ended", () => {
       setPlaying(false)
     })
