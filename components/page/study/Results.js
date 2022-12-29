@@ -63,10 +63,10 @@ const YouSaid = styled.div`
   }
 `
 
-export default function Results({ data, results }) {
-  const { wrong, correct } = res(data, results)
-  const accuracy = Math.round((correct / data.questions.length) * 100)
-  let resource = data.questions[0].question ? false : true;
+export default function Results({ questions, results }) {
+  const { wrong, correct } = res(questions, results)
+  let resource = (questions && questions[0]?.question) ? false : true;
+  const accuracy = Math.round((correct / questions?.length) * 100)
 
   return (
     <Wrapper>
@@ -102,15 +102,15 @@ export default function Results({ data, results }) {
   )
 }
 
-function res(data, results) {
+function res(questions, results) {
   const messedUp = []
   let correct = 0
 
 
 
-  if(data.questions[0].question) {
-  for(let i = 0; i < data.questions.length; i++) {
-    const question = data.questions[i]
+  if(questions && questions[0]?.question) {
+  for(let i = 0; i < questions.length; i++) {
+    const question = questions[i]
     let correctIndex
     for(let j = 0; j < question.answers.length; j++) {
       if(question.answers[j].correct) {

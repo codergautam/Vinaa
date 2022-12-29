@@ -23,6 +23,7 @@ const UnitCard = styled.div`
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
+  text-align: center;
 
 `
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
@@ -39,7 +40,6 @@ export default function Sets() {
     <p>Loading...</p>
   )
   return (
-    <center>
     <SetGroup>
     {
       data.map((unit,i) => {
@@ -63,6 +63,5 @@ export default function Sets() {
       })
     }
     </SetGroup>
-    </center>
   );
 }

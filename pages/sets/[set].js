@@ -47,6 +47,7 @@ export default function Set() {
   const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
   const [parent] = useAutoAnimate()
+  let questions = data?.questions?.sort(() => Math.random() - 0.5);
 
   return (
     <Wrapper>
@@ -56,12 +57,12 @@ export default function Set() {
           <>
             <Header title={data.name} id={set} />
             {done ? (
-              <Results data={data} results={results} />
+              <Results questions={data.questions} results={results} />
             ) : (
               <Card>
                 <Question
-                  last={data.questions.length - 1 === q}
-                  data={data.questions[q]}
+                  last={questions.length - 1 === q}
+                  data={questions[q]}
                   done={(selected, correct) => {
                     const temp = results.slice()
                     temp.push(selected)

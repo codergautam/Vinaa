@@ -120,7 +120,7 @@ export async function finishResource({ id, user }) {
 
 export function latest() {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM sets ORDER BY ROWID DESC LIMIT 6", (err, rows) => {
+    db.all("SELECT * FROM sets ORDER BY ROWID DESC", (err, rows) => {
       if (err) {
         reject(err)
       } else {

@@ -15,9 +15,11 @@ export default async function handler(req, res) {
     })
   })
 
-  console.log(pathwaySets)
+  let lastCompleted = 0;
+  let curCnt = 0;
   for(let i in pathwaySets) {
     for(let j in pathwaySets[i]) {
+      curCnt++;
     pathwaySets[i][j].questions = JSON.parse(pathwaySets[i][j].questions)
     // fetch points
     if(session) {
@@ -26,6 +28,10 @@ export default async function handler(req, res) {
       if(progress) {
         pathwaySets[i][j].points = progress
       } else pathwaySets[i][j].points = 0
+
+      if(pathwaySets[i][j].points >= 500) lastCompleted = curCnt;
+      else if(lastCompleted+1 < curCnt) pathwaySets[i][j].locked = true;
+
     }
   }
   res.status(200).json(pathwaySets)
