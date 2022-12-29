@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Trash } from "react-feather"
@@ -72,16 +72,17 @@ const Radio = styled.input`
   }
 `
 
-const Input = styled.div`
+const Input = styled.textarea`
   outline: none;
   border: none;
   width: 100%;
+  max-width: 100%;
   font-size: 1.2rem;
   padding: 7px 10px;
   border-bottom: 3px solid var(--color-light-gray);
   transition: border-bottom-width 200ms, border-bottom-color 200ms;
   margin-bottom: 20px;
-  max-height: 170px; /* the input auto grows, but not more than 4 rows */
+  max-height: 200px; /* the input auto grows, but not more than 4 rows */
   overflow: auto;
 
   :focus {
@@ -93,6 +94,7 @@ const Input = styled.div`
     color: rgb(150, 150, 150);
     pointer-events: none;
   }
+
 `
 const Answer = styled.input`
   font-size: 1.15rem;
@@ -169,37 +171,35 @@ export default function Question({ data, update, remove }) {
 
   console.log("cur:", cur)
 
+  useEffect(() => {
+     update(data.id, cur)
+  }, [cur])
+
   return (
-    <Group onBlur={() => update(data.id, cur)}>
+    <Group>
             <Input
         placeholder="Your prompt..."
         style={{
           display: cur.questionAudio ? "block" : "none"
         }}
-        contentEditable="plaintext-only"
-        suppressContentEditableWarning={true}
         onChange={e => {
-        }}
-        onBlur={e => {
           setCur({
-           ...cur,
-            prompt: e.target.innerText
+            ...cur,
+            prompt: e.target.value
           })
         }}
-      >{data.prompt}</Input>
+        value={cur.prompt}
+      />
       <Input
         placeholder={"Your question... "+(cur.questionAudio ? "(Audio)" : "")+(cur.showQuestion ? "" : " (Hidden)")}
-        contentEditable="plaintext-only"
-        suppressContentEditableWarning={true}
         onChange={e => {
-        }}
-        onBlur={e => {
           setCur({
-           ...cur,
-            question: e.target.innerText
+            ...cur,
+            question: e.target.value
           })
         }}
-      >{data.question}</Input>
+        value={cur.question}
+      />
 
       <input type="checkbox" value={data.questionAudio} onChange={
         (e) => {

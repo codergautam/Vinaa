@@ -24,6 +24,7 @@ const Input = styled.textarea`
   outline: none;
   border: none;
   width: 100%;
+  max-width: 100%;
   font-size: 1.2rem;
   padding: 7px 10px;
   border-bottom: 3px solid var(--color-light-gray);
@@ -41,6 +42,7 @@ const Input = styled.textarea`
     color: rgb(150, 150, 150);
     pointer-events: none;
   }
+
 `
 
 const Underhang = styled.div`
