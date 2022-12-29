@@ -1,0 +1,5 @@
+.progress {
+  color: black;
+  position: absolute;
+  transform: translate(250%, 0);
+}

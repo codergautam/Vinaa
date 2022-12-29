@@ -5,6 +5,7 @@ import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBook, faPencil, faLock } from "@fortawesome/free-solid-svg-icons"
 import ProgressBar from "@ramonak/react-progress-bar"
+import styles from "./progressfix.module.css"
 
 const Set = styled.div`
 cursor: pointer;
@@ -57,7 +58,6 @@ font-size: 1rem;
   font-size: 0.75rem;
 }
 `
-
 export default function SetCard(props) {
 const { set } = props
 let resource = set.questions[0].text;
@@ -91,11 +91,11 @@ return (
         )
         } */}
 {
-  (resource || set.points >= 500) ? (
+  (resource || set.points >= 500 || set.locked) ? (
     (set.points >= 500) ? `Completed ${resource ? "" : `(${set.points} points)`}` : ""
   ) : (
     <div style={{paddingTop: '10px'}}>
-    <ProgressBar bgColor={set.points >= 500 ? "teal" : "purple"} width={"100%"} completed={(((set.points/500)*100).toFixed(0))} customLabel={
+    <ProgressBar labelClassName={(set.points/500) <= 0.1 ? styles.progress : ""} bgColor={set.points >= 500 ? "teal" : "purple"} width={"100%"} completed={(((set.points/500)*100).toFixed(0))} customLabel={
       `${set.points} point${(set.points) - 1 ? "s" : ""} ${(set.points < 500) ? `(${((set.points/500)*100).toFixed(0)}%)`: "(completed)"}`
     } />
     </div>
