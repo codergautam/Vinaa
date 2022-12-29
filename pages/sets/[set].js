@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import styled from "styled-components"
@@ -47,7 +47,15 @@ export default function Set() {
   const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
   const [parent] = useAutoAnimate()
-  let questions = data?.questions?.sort(() => Math.random() - 0.5);
+
+  let [questions, setQuestions] = useState([]);
+  useEffect(() => {
+    // console.log("data", data)
+    if (data) {
+      setQuestions(data?.questions?.sort(() => Math.random() - 0.5));
+    }
+  }, [data]);
+
 
   return (
     <Wrapper>
