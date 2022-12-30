@@ -1,5 +1,7 @@
 .progress {
   color: black;
   position: absolute;
-  transform: translate(250%, 0);
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-weight: bold;
 }

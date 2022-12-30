@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBook, faPencil, faLock } from "@fortawesome/free-solid-svg-icons"
 import ProgressBar from "@ramonak/react-progress-bar"
 import styles from "./progressfix.module.css"
+import { useState, useEffect } from "react";
 
 const Set = styled.div`
 cursor: pointer;
@@ -58,30 +59,80 @@ font-size: 1rem;
   font-size: 0.75rem;
 }
 `
-export default function SetCard(props) {
-const { set } = props
-let resource = set.questions[0].text;
-return (
-  <Set key={set.id} style={{ backgroundColor: (set.locked ? "#F5F5F5" : (set.points >= 500 ? "#abf7b1" :"rgba(255, 156, 251, 0.2)")), cursor: (set.locked ? "default" : "pointer") }}>
-    {
-      set.locked ? (
-      <FontAwesomeIcon icon={faLock} style={{ position:"absolute"}} />
-      ) : (
-      resource ? (
-      <FontAwesomeIcon icon={faBook} style={{ position:"absolute"}} />
-      ) : (
-      <FontAwesomeIcon icon={faPencil} style={{ position:"absolute"}} />
-      )
-      )
+
+function useWindowSize() {
+  // Initialize state with undefined width/height so server and client renders match
+  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    // only execute all the code below in client side
+    // Handler to call on window resize
+    function handleResize() {
+      // Set window width/height to state
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
+  return windowSize;
 }
-    <SetTitle href={set.locked?"":((resource?"/resources/":"/sets/") + set.id)} style={{cursor: (set.locked ? "default" : "pointer") }}>
-      {set.name}
-    </SetTitle>
-    <SetInfo>
-      {/* <SetCreator href={"/user/" + set.user}>{set.user}</SetCreator> */}
-      {/* <SetQuestions>{set.questions.length} question{set.questions.length - 1 ? "s" : ""}</SetQuestions> */}
-      <SetPoints style={{width: "100%"}}>
-        {/* {
+
+
+export default function SetCard(props) {
+  const { set } = props
+  const size = useWindowSize();
+
+  let sizeMap = [
+    [400, 0.6],
+    [600, 0.4],
+    [800, 0.2]
+  ]
+
+  let [mySize, setMySize] = useState(0.3);
+  useEffect(() => {
+    if (!size.width) return;
+    console.log(size)
+    let test = sizeMap.find(([w, s]) => size.width < w);
+    if (!test) test = sizeMap[sizeMap.length - 1]
+    setMySize(test[1])
+  }, [size])
+
+  let resource = set.questions[0].text;
+  return (
+    <Set key={set.id} style={{ backgroundColor: (set.locked ? "#F5F5F5" : (set.points >= 500 ? "#abf7b1" : "rgba(255, 156, 251, 0.2)")), cursor: (set.locked ? "default" : "pointer") }}>
+      {
+        set.locked ? (
+          <FontAwesomeIcon icon={faLock} style={{ position: "absolute" }} />
+        ) : (
+          resource ? (
+            <FontAwesomeIcon icon={faBook} style={{ position: "absolute" }} />
+          ) : (
+            <FontAwesomeIcon icon={faPencil} style={{ position: "absolute" }} />
+          )
+        )
+      }
+      <SetTitle href={set.locked ? "" : ((resource ? "/resources/" : "/sets/") + set.id)} style={{ cursor: (set.locked ? "default" : "pointer") }}>
+        {set.name}
+      </SetTitle>
+      <SetInfo>
+        {/* <SetCreator href={"/user/" + set.user}>{set.user}</SetCreator> */}
+        {/* <SetQuestions>{set.questions.length} question{set.questions.length - 1 ? "s" : ""}</SetQuestions> */}
+        <SetPoints style={{ width: "100%" }}>
+          {/* {
         resource ? (
           (set.points == 500) ? "Completed" : ""
         ) : (
@@ -90,27 +141,27 @@ return (
 
         )
         } */}
-{
-  (resource || set.points >= 500 || set.locked) ? (
-    (set.points >= 500) ? `Completed ${resource ? "" : `(${set.points} points)`}` : ""
-  ) : (
-    <div style={{paddingTop: '10px'}}>
-    <ProgressBar labelClassName={(set.points/500) <= 0.1 ? styles.progress : ""} bgColor={set.points >= 500 ? "teal" : "purple"} width={"100%"} completed={(((set.points/500)*100).toFixed(0))} customLabel={
-      `${set.points} point${(set.points) - 1 ? "s" : ""} ${(set.points < 500) ? `(${((set.points/500)*100).toFixed(0)}%)`: "(completed)"}`
-    } />
-    </div>
-  )
-  }
+          {
+            (resource || set.points >= 500 || set.locked) ? (
+              (set.points >= 500) ? `Completed ${resource ? "" : `(${set.points} points)`}` : ""
+            ) : (
+              <div style={{ paddingTop: '10px' }}>
+                <ProgressBar labelClassName={(set.points / 500) <= mySize ? styles.progress : ""} bgColor={set.points >= 500 ? "teal" : "purple"} width={"100%"} completed={(((set.points / 500) * 100).toFixed(0))} customLabel={
+                  `${set.points} point${(set.points) - 1 ? "s" : ""} ${(set.points < 500) ? `(${((set.points / 500) * 100).toFixed(0)}%)` : "(completed)"}`
+                } />
+              </div>
+            )
+          }
 
         </SetPoints>
-      {
-        props.showId ? (
-      <SetPoints>ID: {set.id}</SetPoints>
+        {
+          props.showId ? (
+            <SetPoints>ID: {set.id}</SetPoints>
           ) : null
-      }
+        }
 
-    </SetInfo>
+      </SetInfo>
 
-  </Set>
-)
+    </Set>
+  )
 }
