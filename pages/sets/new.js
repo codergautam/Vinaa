@@ -86,6 +86,7 @@ export default function New() {
   const [questions, setQuestions] = useState([])
   const [parent] = useAutoAnimate()
   const [loading, setLoading] = useState(false)
+  const [creating, setCreating] = useState(false)
 
   // this is to enable access in the beforeunload event
   // because you can't access state in beforeunload
@@ -215,6 +216,16 @@ export default function New() {
 
           }
 
+
+          if(creating) {
+            return toast.error("Please wait... your set is already being created ", {
+            position: "bottom-center"
+          })
+        }
+        toast("Creating set... (this can take upto 1-2 minutes if there is lots of audio)", {
+          position: "bottom-center"
+        });
+          setCreating(true)
           const res = await fetch("/api/sets/new", {
             method: 'POST',
             headers: {
@@ -224,6 +235,7 @@ export default function New() {
             body: JSON.stringify({ questions, name })
           })
           const data = await res.json()
+          setCreating(false)
 
           if(res.status !== 200) {
             return toast.error(data.message, {
