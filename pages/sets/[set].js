@@ -72,6 +72,7 @@ export default function Set() {
                   last={questions.length - 1 === q}
                   data={questions[q]}
                   total={questions.length}
+                  questionNum={q + 1}
                   done={(selected, correct) => {
                     const temp = results.slice()
                     temp.push(selected)

@@ -51,7 +51,8 @@ export default function Question({
   data,
   done,
   last,
-  total
+  total,
+  questionNum
 }) {
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()
@@ -100,7 +101,7 @@ export default function Question({
   return (
     <Wrapper ref={parent}>
       <center>
-        <h1>Question {data.id+1} / {total}</h1>
+        <h1>Question {questionNum} / {total}</h1>
       <Ask>{data.prompt}</Ask>
       {questionAudio ? (
         <div>
