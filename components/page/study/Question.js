@@ -50,7 +50,8 @@ const Option = styled.button`
 export default function Question({
   data,
   done,
-  last
+  last,
+  total
 }) {
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()
@@ -99,6 +100,7 @@ export default function Question({
   return (
     <Wrapper ref={parent}>
       <center>
+        <h1>Question {data.id+1} / {total}</h1>
       <Ask>{data.prompt}</Ask>
       {questionAudio ? (
         <div>
