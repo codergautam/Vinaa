@@ -55,7 +55,7 @@ function recordTamil(text) {
     });
     console.log("Now synthesizing to: " + filename);
   });
-}, queueLength * (queueLength < 3 ? 1000 : 5000));
+}, queueLength * 3000);
 
 }
 
@@ -97,17 +97,16 @@ export default async function handler(req, res) {
       if(e.questionAudio) {
         try {
 
-        let base64question = Buffer.from(e.question).toString("base64");
 
-          if(recorded[base64question]) {
+          if(recorded[e.question]) {
             console.log("Found "+e.question+" from cache")
-        e.questionAudio = recorded[base64question];
+        e.questionAudio = recorded[e.question];
             
           } else {
         let record = await recordTamil(e.question);
         e.questionAudio = record;
           
-        recorded[base64question] = record;
+        recorded[e.question] = record;
           }
         } catch(e) {
           console.error(e);
@@ -117,13 +116,13 @@ export default async function handler(req, res) {
         for(let answer of e.answers) {
           try {
             let base64answer = Buffer.from(answer.label).toString("base64");
-            if(recorded[base64answer]) { answer.answerAudio = recorded[base64answer];
+            if(recorded[answer.label]) { answer.answerAudio = recorded[answer.label];
                                         console.log("Found "+answer.label+" from cache")
                                        }
             else {
             let record = await recordTamil(answer.label);
             answer.answerAudio = record;
-            recorded[base64answer] = record;
+            recorded[answer.label] = record;
             }
           } catch(e) {
             console.error(e);
