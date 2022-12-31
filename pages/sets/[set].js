@@ -52,6 +52,7 @@ export default function Set() {
   useEffect(() => {
     // console.log("data", data)
     if (data) {
+      console.log("shuffling questions")
       setQuestions(data?.questions?.sort(() => Math.random() - 0.5));
     }
   }, [data]);
