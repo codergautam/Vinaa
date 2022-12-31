@@ -69,7 +69,7 @@ export default function Question({
 
       // dont play if correct answer
       if(data.answers[selected].correct) return;
-      
+
       // play audio
       answerAudios[selected].play()
 
@@ -131,8 +131,11 @@ export default function Question({
           return (
             <Option
               key={answer.id}
-              onClick={() => setSelected(answer.id)}
-              disabled={typeof selected === "number"}
+              onClick={() => {
+                if(answerAudios[answer.id]) answerAudios[answer.id].play()
+                if(typeof selected === "number") return;
+                setSelected(answer.id)
+              }}
               style={styles}
             >
               {answer.label}
