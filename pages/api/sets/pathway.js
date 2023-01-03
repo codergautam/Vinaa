@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   for(let i in pathwaySets) {
     for(let j in pathwaySets[i]) {
       curCnt++;
-    pathwaySets[i][j].questions = JSON.parse(pathwaySets[i][j].questions)
+    // delete pathwaySets[i][j].questions
     // fetch points
     if(session) {
       let sessId = session.id;
@@ -34,8 +34,9 @@ export default async function handler(req, res) {
 
     }
   }
-  res.status(200).json(pathwaySets)
 }
+  res.status(200).json(pathwaySets)
+  
 }
 
 /*
