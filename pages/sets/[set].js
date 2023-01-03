@@ -98,7 +98,7 @@ export default function Set() {
                          body: JSON.stringify({
                            id: set,
                            accuracy,
-                           timeElapsed
+                           timePerQuestion: (timeElapsed / (q+1))
                          }),
                        }).then((res) => {
                           res.json().then((data) => {

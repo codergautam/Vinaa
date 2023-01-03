@@ -21,6 +21,7 @@ export default async function handler(req, res) {
     for(let j in pathwaySets[i]) {
       curCnt++;
     // delete pathwaySets[i][j].questions
+       pathwaySets[i][j].questions = JSON.parse(pathwaySets[i][j].questions)
     // fetch points
     if(session) {
       let sessId = session.id;

@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       })
 
     try {
-      const { id, accuracy, done } = JSON.parse(req.body)
+      const { id, accuracy, done, timePerQuestion } = JSON.parse(req.body)
 
 
       if(!id) return res.status(400).json({
@@ -64,7 +64,16 @@ export default async function handler(req, res) {
 
       console.log("id", id, "accuracy", accuracy, "user", session.id)
 
-      const newPoints = await setProgress({ id, user: session.id, points: accuracy })
+        let multiplier = 1;
+        if(timePerQuestion) {
+          if(timePerQuestion < 2000) multiplier = 3
+          if(timePerQuestion < 3000) multiplier = 2
+          if(timePerQuestion < 4000) multiplier =1.5
+        }
+
+        // console.log(multiplier)
+
+      const newPoints = await setProgress({ id, user: session.id, points: Math.round(accuracy*multiplier) })
 
       return res.status(200).json({
         points: newPoints
