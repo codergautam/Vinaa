@@ -216,8 +216,8 @@ export default function Question({ data, update, remove }) {
             })
           }
         }
-      } id="audioQ"/>
-      <label htmlFor="audioQ">Question Audio</label>
+      } id={"audioQ"+data.id}/>
+      <label htmlFor={"audioQ"+data.id}>Question Audio</label>
 
       <br/>
 
@@ -233,8 +233,8 @@ export default function Question({ data, update, remove }) {
             answerAudio: false
           })
         }
-      }} id="audioA"/>
-            <label htmlFor="audioA">Answer Audio</label>
+      }} id={"audioA"+data.id}/>
+            <label htmlFor={"audioA"+data.id}>Answer Audio</label>
             <br/>
       <input type="checkbox" disabled={cur.questionAudio ? false : true} checked={cur.showQuestion} key={Math.random()} onChange={(e) => {
         setCur({
@@ -242,9 +242,9 @@ export default function Question({ data, update, remove }) {
           showQuestion: e.target.checked
         })
         update(data.id, cur)
-      }} id="showQ"/>
+      }} id={"showQ"+data.id}/>
 
-      <label htmlFor="showQ" >Show Question</label>
+      <label htmlFor={"showQ"+data.id} >Show Question</label>
 
       <OptionGroup ref={parent} style={{
         display: data.answers.length === 2 ? "flex" : ""

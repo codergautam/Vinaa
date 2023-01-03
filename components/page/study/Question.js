@@ -60,6 +60,7 @@ export default function Question({
   // let answerAudios = [];
   const [answerAudios, setAnswerAudios] = useState([]);
 
+  console.log(data, data?.id)
   useEffect(() => {
     if(!data?.answers) return;
     setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/audio/"+answer.answerAudio+".wav") : null));
