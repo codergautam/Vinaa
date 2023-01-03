@@ -96,9 +96,13 @@ export default function Question({
         <br/>
         <br/>
         </div>
-      ) : (
+      ) : null}
+        {
+          data?.showQuestion ? (
       <Ask>{data.question}</Ask>
-      )}
+            
+          ) : null
+        }
       </center>
       <Options>
         {data.answers.map(answer => {
