@@ -60,25 +60,11 @@ export default function Question({
   // let answerAudios = [];
   const [answerAudios, setAnswerAudios] = useState([]);
 
-  console.log(data, data?.id)
   useEffect(() => {
     if(!data?.answers) return;
     setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/audio/"+answer.answerAudio+".wav") : null));
   }, [data?.answers]);
-
-  useEffect(() => {
-    // selected has changed
-    if(selected !== undefined && answerAudios[selected]) {
-
-      // dont play if correct answer
-      if(data.answers[selected].correct) return;
-
-      // play audio
-      answerAudios[selected].play()
-
-    }
-  }, [selected]);
-
+  
   useEffect(() => {
     setSelected()
     if(data?.questionAudio) setQuestionAudio("/audio/"+data.questionAudio+".wav")
@@ -136,7 +122,7 @@ export default function Question({
             <Option
               key={answer.id}
               onClick={() => {
-                if(answerAudios[answer.id]) answerAudios[answer.id].play()
+                if(answerAudios[answer.id] && (typeof selected === "number" || !data.answers[answer.id].correct)) answerAudios[answer.id].play()
                 if(typeof selected === "number") return;
                 setSelected(answer.id)
               }}

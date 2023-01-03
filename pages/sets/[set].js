@@ -47,11 +47,14 @@ export default function Set() {
   const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
   const [parent] = useAutoAnimate()
-
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+  
   let [questions, setQuestions] = useState([]);
   useEffect(() => {
     // console.log("data", data)
     if (data) {
+    setStartTime(Date.now());
       console.log("shuffling questions")
       setQuestions(data?.questions?.sort(() => Math.random() - 0.5));
     }
@@ -66,7 +69,7 @@ export default function Set() {
           <>
             <Header title={data.name} id={set} />
             {done ? (
-              <Results questions={data.questions} results={results} />
+              <Results questions={data.questions} results={results} timeElapsed={endTime-startTime} />
             ) : (
               <Card>
                 <Question
@@ -87,12 +90,15 @@ export default function Set() {
                     if (q + 1 === data.questions.length) {
                       const correct = tempCorrect;
                       const accuracy = Math.round((correct / (q+1)) * 100)
+                      const timeElapsed = Date.now() - startTime;
+                      setEndTime(Date.now())
                       // console.log(temp, correct, q+1, accuracy)
                        fetch("/api/sets/progress", {
                          method: "POST",
                          body: JSON.stringify({
                            id: set,
                            accuracy,
+                           timeElapsed
                          }),
                        }).then((res) => {
                           res.json().then((data) => {

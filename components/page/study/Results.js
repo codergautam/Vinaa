@@ -63,7 +63,38 @@ const YouSaid = styled.div`
   }
 `
 
-export default function Results({ questions, results }) {
+function msToTime(duration) {
+    const portions = [];
+      const msInDay = 1000 * 60 * 60 * 24;
+    const days = Math.trunc(duration / msInDay);
+    if (days > 0) {
+      portions.push(days + 'd');
+      duration = duration - (days * msInDay);
+    }
+  
+    const msInHour = 1000 * 60 * 60;
+    const hours = Math.trunc(duration / msInHour);
+    if (hours > 0) {
+      portions.push(hours + 'h');
+      duration = duration - (hours * msInHour);
+    }
+  
+    const msInMinute = 1000 * 60;
+    const minutes = Math.trunc(duration / msInMinute);
+    if (minutes > 0) {
+      portions.push(minutes + 'm');
+      duration = duration - (minutes * msInMinute);
+    }
+  
+    const seconds = Math.trunc(duration / 1000);
+    if (seconds > 0) {
+      portions.push(seconds + 's');
+    }
+  
+    return portions.join(' ');
+  }
+
+export default function Results({ questions, results, timeElapsed }) {
   const { wrong, correct } = res(questions, results)
   let resource = (questions && questions[0]?.question) ? false : true;
   const accuracy = Math.round((correct / questions?.length) * 100)
@@ -74,7 +105,10 @@ export default function Results({ questions, results }) {
         <Title>All done!</Title>
 
         {!resource ? (
+      <div>
         <Note>You scored <Percent>{accuracy}%</Percent> on your last attempt.</Note>
+      <Note> Time: <Percent>{msToTime(timeElapsed)}</Percent> </Note>
+        </div>
         ) : null}
         {wrong.length ? (
           <Wrongs>
