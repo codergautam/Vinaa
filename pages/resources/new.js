@@ -4,7 +4,7 @@ import { PlusCircle } from "react-feather"
 import toast from "react-hot-toast"
 import Router from  "next/router"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-
+import { unstable_getServerSession as getServerSession } from "next-auth/next"
 import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/create/Header"
 import Page from "@/components/page/create/Page"
@@ -214,5 +214,18 @@ export default function New() {
     </Wrapper>
   )
 }
-
-export { getServerSideProps } from "@/server/protected"
+const admins = JSON.parse(process.env.ADMINS)
+export async function getServerSideProps({ req, res }) {
+  const session = await getServerSession(req, res)
+  if(session && !admins.includes(session.user.email)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/learn"
+      }
+    }
+  }
+  return {
+    props: { session }
+  }
+}
