@@ -151,8 +151,8 @@ function validate(name, questions) {
   if (!questions || !questions.length)
     return "At least one question is required"
 
-  if(questions.length > 20)
-    return "A set may not have more than 20 questions"
+  if(questions.length > 50)
+    return "A set may not have more than 50 questions"
 
   for (let i in questions) {
     i = +i
