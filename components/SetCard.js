@@ -126,7 +126,7 @@ export default function SetCard(props) {
         )
       }
       <SetTitle href={set.locked ? "" : ((resource ? "/resources/" : "/sets/") + set.id)} style={{ cursor: (set.locked ? "default" : "pointer") }}>
-        {set.name}
+        {set.name.split("-")[0]}<br/>{set.name.split("-").slice(1).join("-")}
       </SetTitle>
       <SetInfo>
         {/* <SetCreator href={"/user/" + set.user}>{set.user}</SetCreator> */}
