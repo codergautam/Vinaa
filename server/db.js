@@ -87,7 +87,7 @@ export function setProgress({ id, user, points }) {
   // points = points to add
   return new Promise((resolve, reject) => {
     progressExists({set: id, id: user}).then(exists => {
-      if(exists) {
+      if(exists !== false) {
     db.run("UPDATE progress SET points = ? WHERE setId = ? and userId = ?", [exists+points, id, user], (err) => {
       if (err) {
         reject(err)

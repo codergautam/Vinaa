@@ -13,7 +13,7 @@ import {
 } from "@/server/protected"
 import { getSession } from "next-auth/react"
 import {
-  getProgress,
+  progressExists,
   setProgress,
   finishResource
 } from "@/server/db"
@@ -66,9 +66,12 @@ export default async function handler(req, res) {
 
         let multiplier = 1;
         if(timePerQuestion) {
-          if(timePerQuestion < 2000) multiplier = 3
-          if(timePerQuestion < 3000) multiplier = 2
-          if(timePerQuestion < 4000) multiplier =1.5
+          if(timePerQuestion < 2000) multiplier = 5
+          if(timePerQuestion < 3000) multiplier = 4
+          if(timePerQuestion < 4000) multiplier =3
+          if(timePerQuestion < 5000) multiplier =2.5
+
+          if(timePerQuestion < 6000) multiplier =1.5
         }
 
         // console.log(multiplier)
@@ -94,8 +97,8 @@ export default async function handler(req, res) {
       })
 
     try {
-      const progress = await getProgress(req.query.id, data.username)
-      return res.status(200).json(progress.map(({ progress }) => progress))
+      const progress = await progressExists(req.query.id, data.username)
+      return res.status(200).json(progress)
     } catch (e) {
       console.error(e)
       return res.status(500).json({

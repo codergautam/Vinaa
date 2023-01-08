@@ -3,6 +3,7 @@ import useSWR from "swr"
 import { useRouter } from "next/router"
 import SetCard from "@/components/SetCard"
 import {pathway} from "../../pathway.json"
+import Button from "@/components/Button"
 
 
 // use CSS grid to create a 3x2 grid of sets
@@ -30,7 +31,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Sets() {
   const router = useRouter()
-  const { data, error } = useSWR("/api/sets/pathway", fetcher)
+  const { data, error, mutate } = useSWR("/api/sets/pathway", fetcher)
 
   if (error) {
     console.error(error);
@@ -47,6 +48,22 @@ export default function Sets() {
         return (
           <div>
             <UnitCard>
+              {
+                unit[0].locked ? <Button onClick={() => {
+                  fetcher("/api/sets/skip", {
+                    method: "POST",
+                    body: JSON.stringify({
+                      id: unit[0].id
+                    })
+                  }).then(({changed}) => {
+                    if(changed.length > 0) {
+                      mutate();
+                    }
+                  }).catch((e) => {
+                    console.error(e);
+                  });
+                }}>Skip to here</Button> : null
+      }
           <h1>{pathway[i].name}</h1>
           <p>{pathway[i].description}</p>
           </UnitCard>
