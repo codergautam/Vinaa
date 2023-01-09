@@ -62,24 +62,22 @@ export default async function handler(req, res) {
         message: "Accuracy must be a number between 0 and 100"
       })
 
-      console.log("id", id, "accuracy", accuracy, "user", session.id)
-
         let multiplier = 1;
         if(timePerQuestion) {
-          if(timePerQuestion < 2000) multiplier = 5
-          if(timePerQuestion < 3000) multiplier = 4
-          if(timePerQuestion < 4000) multiplier =3
-          if(timePerQuestion < 5000) multiplier =2.5
-
-          if(timePerQuestion < 6000) multiplier =1.5
+          if(timePerQuestion < 5500) multiplier =1.5
+          if(timePerQuestion < 4500) multiplier =2
+          if(timePerQuestion < 3500) multiplier = 2.5
+          if(timePerQuestion < 2000) multiplier = 3
         }
+
 
         // console.log(multiplier)
 
       const newPoints = await setProgress({ id, user: session.id, points: Math.round(accuracy*multiplier) })
 
       return res.status(200).json({
-        points: newPoints
+        points: newPoints,
+        gained: Math.round(accuracy*multiplier)
       })
     }
 

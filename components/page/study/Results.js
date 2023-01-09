@@ -20,7 +20,7 @@ const Title = styled.h2`
 const Note = styled.p`
   color: var(--color-gray);
   font-size: 1.1rem;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 `
 const Percent = styled.span`
   color: var(--color-purple);
@@ -71,30 +71,30 @@ function msToTime(duration) {
       portions.push(days + 'd');
       duration = duration - (days * msInDay);
     }
-  
+
     const msInHour = 1000 * 60 * 60;
     const hours = Math.trunc(duration / msInHour);
     if (hours > 0) {
       portions.push(hours + 'h');
       duration = duration - (hours * msInHour);
     }
-  
+
     const msInMinute = 1000 * 60;
     const minutes = Math.trunc(duration / msInMinute);
     if (minutes > 0) {
       portions.push(minutes + 'm');
       duration = duration - (minutes * msInMinute);
     }
-  
+
     const seconds = Math.trunc(duration / 1000);
     if (seconds > 0) {
       portions.push(seconds + 's');
     }
-  
+
     return portions.join(' ');
   }
 
-export default function Results({ questions, results, timeElapsed }) {
+export default function Results({ questions, results, timeElapsed, pointsGained }) {
   const { wrong, correct } = res(questions, results)
   let resource = (questions && questions[0]?.question) ? false : true;
   const accuracy = Math.round((correct / questions?.length) * 100)
@@ -107,7 +107,10 @@ export default function Results({ questions, results, timeElapsed }) {
         {!resource ? (
       <div>
         <Note>You scored <Percent>{accuracy}%</Percent> on your last attempt.</Note>
-      <Note> Time: <Percent>{msToTime(timeElapsed)}</Percent> </Note>
+
+      <Note> Time Taken: <Percent>{msToTime(timeElapsed)}</Percent> </Note>
+      <br/>
+
         </div>
         ) : null}
         {wrong.length ? (

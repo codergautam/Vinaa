@@ -49,7 +49,8 @@ export default function Set() {
   const [parent] = useAutoAnimate()
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
-  
+  const [pointsGained, setPointsGained] = useState(0);
+
   let [questions, setQuestions] = useState([]);
   useEffect(() => {
     // console.log("data", data)
@@ -69,7 +70,7 @@ export default function Set() {
           <>
             <Header title={data.name} id={set} />
             {done ? (
-              <Results questions={data.questions} results={results} timeElapsed={endTime-startTime} />
+              <Results questions={data.questions} results={results} timeElapsed={endTime-startTime} pointsGained={pointsGained} />
             ) : (
               <Card>
                 <Question
@@ -105,7 +106,8 @@ export default function Set() {
                             if (data.error) {
                               toast.error(data.error)
                             } else {
-                              toast.success("You now have " + data.points + " points on this lesson!");
+                              toast.success("You now have " + data.points + " points on this lesson! ("+data.gained+" gained)", {duration: 5000});
+                              setPointsGained(data.gained)
                               setDone(true)
                             }
                           });

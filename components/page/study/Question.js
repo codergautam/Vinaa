@@ -79,7 +79,7 @@ export default function Question({
     if(selected !== undefined && (!last && (selected == correctIndex))) {
       setTimeout(() => {
         done(selected, true)
-      }, 500)
+      }, 1000)
     }
   }, [selected])
 
