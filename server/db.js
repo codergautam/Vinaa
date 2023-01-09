@@ -108,6 +108,18 @@ export function setProgress({ id, user, points }) {
   })
 }
 
+export function deleteProgress({ id, user }) {
+  return new Promise((resolve, reject) => {
+    db.run("DELETE FROM progress WHERE setId = ? and userId = ?", [id, user], (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
 export async function finishResource({ id, user }) {
   let current = await progressExists({set: id, id: user});
   if(current) {
