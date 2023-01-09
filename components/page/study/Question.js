@@ -4,6 +4,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import Button from "@/components/Button"
 import AudioButton from "./AudioButton"
+import ProgressBar from "@ramonak/react-progress-bar"
 
 const Wrapper = styled.div`
   padding: 30px 40px;
@@ -64,7 +65,7 @@ export default function Question({
     if(!data?.answers) return;
     setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/audio/"+answer.answerAudio+".wav") : null));
   }, [data?.answers]);
-  
+
   useEffect(() => {
     setSelected()
     if(data?.questionAudio) setQuestionAudio("/audio/"+data.questionAudio+".wav")
@@ -87,8 +88,10 @@ export default function Question({
   if(data) {
   return (
     <Wrapper ref={parent}>
+        <ProgressBar completed={((((questionNum-(typeof selected === "number"?0:1))/total)*100).toFixed(0))+""} customLabel={" "}/>
+
       <center>
-        <h1>Question {questionNum} / {total}</h1>
+        <h1>Question {questionNum}</h1>
       <Ask>{data.prompt}</Ask>
       {questionAudio ? (
         <div>
@@ -100,7 +103,7 @@ export default function Question({
         {
           data?.showQuestion ? (
       <Ask>{data.question}</Ask>
-            
+
           ) : null
         }
       </center>
