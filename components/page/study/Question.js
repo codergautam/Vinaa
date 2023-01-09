@@ -71,8 +71,17 @@ export default function Question({
     if(data?.questionAudio) setQuestionAudio("/audio/"+data.questionAudio+".wav")
   }, [data?.id])
 
-2
+
+
   let correctIndex = 0
+
+  useEffect(() => {
+    if(selected !== undefined && (!last && (selected == correctIndex))) {
+      setTimeout(() => {
+        done(selected, true)
+      }, 500)
+    }
+  }, [selected])
 
   if(data) {
   for (let i in data.answers) {
@@ -81,9 +90,15 @@ export default function Question({
       break
     }
   }
+
+
+
+
   } else {
     return (<div></div>);
   }
+
+
 
   if(data) {
   return (
@@ -140,7 +155,7 @@ export default function Question({
           )
         })}
       </Options>
-      {(typeof selected === "number") ? (
+      {(typeof selected === "number" && (last || (selected != correctIndex))) ? (
         <Button onClick={() => done(selected, selected == correctIndex)}>
           {last ? "Done" : "Next"} &rarr;
         </Button>
