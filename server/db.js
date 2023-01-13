@@ -120,6 +120,18 @@ export function deleteProgress({ id, user }) {
   })
 }
 
+export function getAllSets() {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM sets", (err, rows) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+}
+
 export async function finishResource({ id, user }) {
   let current = await progressExists({set: id, id: user});
   if(current) {
