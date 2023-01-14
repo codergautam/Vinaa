@@ -8,7 +8,8 @@ import Button from "@/components/Button"
 import Underline from "@/components/Underline"
 import Sets from "@/components/Sets"
 import Footer from "@/components/Footer"
-
+import { TypeAnimation } from 'react-type-animation';
+import { useState } from "react"
 import desktopBackground from "@/assets/backgrounds/vina-bg-desktop.svg"
 import mobileBackground from "@/assets/backgrounds/vina-bg-mobile.svg"
 import indiaAnimation from "@/assets/animations/india.json"
@@ -55,10 +56,12 @@ const Hero = styled.div`
 const FrontMessage = styled.div`
 `
 const Title = styled.h1`
-  font-size: clamp(3rem, 9vw, 5rem);
+  font-size: clamp(3rem, 9vw, 4.7rem);
   max-width: 30vw;
   margin: 0;
   color: var(--color-dark);
+  transition: all 0.2s ease-in-out;
+
 `
 const Description = styled.p`
   font-size: 1.5rem;
@@ -121,6 +124,7 @@ const Filler = styled.div`
 
 function HomePage() {
   const signin = () => signIn("google", { callbackUrl: "/learn" });
+  const [color, setColor] = useState("#3086EB")
   return (
     <Wrapper>
       <PageTitle title="Home" />
@@ -130,7 +134,27 @@ function HomePage() {
           loop={false}
         />
         <FrontMessage>
-          <Title className="upper"><Underline>Vinaa</Underline></Title>
+          <Title className="upper" style={{color, animation: "fadeIn 1s ease-in-out"}}>
+            <TypeAnimation
+              cursor={false}
+              sequence={[
+                "Vinaa",
+                200,
+                () => setColor("#3086EB"),
+                500,
+                () => setColor("black"),
+                "வினா",
+                200,
+                () => setColor("#EF3934"),
+                500,
+                () => setColor("black"),
+              ]}
+              repeat={Infinity}
+              speed={5}
+              deletionSpeed={5}
+              color={color}
+            />
+          </Title>
           <Description>
             தமிழ் கற்க சிறந்த வழி!
           </Description>

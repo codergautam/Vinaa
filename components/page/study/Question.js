@@ -18,6 +18,9 @@ const Wrapper = styled.div`
 `
 const Ask = styled.p`
   font-size: 2rem;
+  @media (max-width: 800px) {
+    font-size: 1.5rem;
+  }
 `
 
 const Options = styled.div`
@@ -60,6 +63,7 @@ export default function Question({
   const [questionAudio, setQuestionAudio] = useState("")
   // let answerAudios = [];
   const [answerAudios, setAnswerAudios] = useState([]);
+  const [showDone, setShowDone] = useState(false);
 
   useEffect(() => {
     if(!data?.answers) return;
@@ -81,6 +85,15 @@ export default function Question({
         done(selected, true)
       }, 1000)
     }
+    if(typeof selected === "number" && (last || ((selected != correctIndex)))) {
+      setShowDone(true);
+    } else {
+      setShowDone(false);
+    }
+  }, [selected])
+
+  useEffect(() => {
+
   }, [selected])
 
   if(data) {
@@ -145,7 +158,9 @@ export default function Question({
               key={answer.id}
               onClick={() => {
                 console.log(answer.label, data.question)
-                if(answerAudios[answer.id] && (typeof selected === "number" || (!data.answers[answer.id].correct || answer.label.trim() != data.question.trim()))) answerAudios[answer.id].play()
+                // if(answerAudios[answer.id] && (typeof selected === "number" || (!data.answers[answer.id].correct || answer.label.trim() != data.question.trim()))) answerAudios[answer.id].play()
+                 if(answerAudios[answer.id]) answerAudios[answer.id].play()
+
                 if(typeof selected === "number") return;
                 setSelected(answer.id)
               }}
@@ -157,7 +172,7 @@ export default function Question({
           )
         })}
       </Options>
-      {(typeof selected === "number" && (last || (selected != correctIndex))) ? (
+      {showDone ? (
         <Button onClick={() => done(selected, selected == correctIndex)}>
           {last ? "Done" : "Next"} &rarr;
         </Button>

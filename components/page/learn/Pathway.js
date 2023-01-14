@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import useWindowSize from "@/components/useWindowSize"
 
 
+
 // use CSS grid to create a 3x2 grid of sets
 const SetGroup = styled.div`
   grid-template-columns: repeat(3, 1fr);
@@ -16,10 +17,15 @@ const SetGroup = styled.div`
   grid-column-gap: 15px;
   grid-row-gap: 15px;
   margin: 0 auto;
-  max-width: 500px;
+  max-width: 900px;
 
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 600px) {
+      max-width: 100%;
+    }
+
 `
 
 const UnitCard = styled.div`
@@ -27,8 +33,21 @@ const UnitCard = styled.div`
   padding: 10px;
   margin-bottom: 10px;
   text-align: center;
-  
+    position: relative;
 
+`
+//style={{backgroundColor: "pink", borderRadius: "10px", position: "absolute", top: 10, left: 10}
+const SkipButton = styled.button`
+    background-color: pink;
+    border-radius: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    @media (max-width: 600px) {
+      position: relative;
+      top: 0px;
+      left: 0px;
+    }
 `
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
@@ -90,12 +109,12 @@ export default function Sets() {
 
         { (size.width < 400) || (size.height < 400) ? (
           <div>
-        <h2>Skip to unit "{skipModal.unit}"?</h2>
+        <h2>Skip to the unit "{skipModal.unit}"?</h2>
         <h5>This will mark the previous content as completed.</h5>
         </div>
         ) : (
           <div>
-        <h1>Skip to unit "{skipModal.unit}"?</h1>
+        <h1>Skip to the unit "{skipModal.unit}"?</h1>
         <h4>This will mark the previous content as completed.</h4>
         </div>
         )}
@@ -130,16 +149,17 @@ export default function Sets() {
 
         return (
           <div>
-            <UnitCard style={{backgroundColor: unit[unit.length-1].locked ? unit[0].locked ? "#c2c4c3" : "#d4aed0" : "#7eb37b"}}>
-          <h1>{pathway[i].name}</h1>
-          <p>{pathway[i].description}</p>
+            <UnitCard style={{backgroundColor:  pathway[i].color ?? "white", border: pathway[i].border ?? ""}}>
+          <h1 style={{color: pathway[i].titleColor ?? "black"}}>{pathway[i].name}</h1>
+          <p style={{color: pathway[i].descriptionColor}}>{pathway[i].description}</p>
           {
                 unit[0].locked ?
-                <button style={{backgroundColor: "pink", borderRadius: "10px"}} onClick={() => {
+                <SkipButton onClick={() => {
                   setSkipModal({open: true, id: unit[0].id, unit: pathway[i].name})
-                }}>Skip to here</button>
+                }}>Skip to here</SkipButton>
                 : null
       }
+
           </UnitCard>
           {
             unit.map(set => {

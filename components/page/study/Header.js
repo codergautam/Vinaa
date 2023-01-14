@@ -62,7 +62,7 @@ export default function Header({ title, id }) {
       <Bar>
         <Button style={{fontSize: size.width < 400 ? "10px" : "15px"}} secondary href="/learn">&larr; Back</Button>
         <Title>{title}</Title>
-        <LogoText size={size.width < 400 ? "20px" : "30px"}/>
+        <LogoText size={size.width < 400 ? "16px" : "26px"} fontSize2={size.width < 400 ? "19px" : "29px"}/>
       </Bar>
       {modal ? <Progress close={() => setModal(false)} set={id} /> : null}
     </>

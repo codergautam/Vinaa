@@ -34,13 +34,13 @@ const UserItem = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--color-dark);
+  color: white;
   text-decoration: none;
   font-size: 1.2rem;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
   justify-self: end;  /* aligns the element to the end of the flex container */
-  background-color: pink;
+  background-color: #43C85B;
   padding: 5px;
   cursor: pointer;
   border-radius: 5px;
@@ -70,8 +70,8 @@ export default function Navbar(props) {
     <div>
       <Nav>
           <LogoText/>
-          <UserItem style={{backgroundColor: "#68d7e3"}} onClick={()=>{window.location.href="/sets/new"}}>
-Create a New Set
+          <UserItem style={{backgroundColor: "#68d7e3", color:"white", paddingLeft: "5px", paddingRight: "5px"}} onClick={()=>{window.location.href="/sets/new"}}>
+Create a Quiz
 </UserItem>
 
           <UserItem onClick={()=>{setHover(!hover)}}>

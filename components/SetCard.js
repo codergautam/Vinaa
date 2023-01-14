@@ -19,8 +19,18 @@ justify-content: space-between;
 padding: 15px;
 background-color: rgba(255, 156, 251, 0.2);
 border-radius: 10px;
-margin: 0 50px;
+margin: 0 200px;
 margin-bottom: 10px;
+
+@media screen and (max-width: 1024px) {
+  margin: 0 100px;
+  margin-bottom: 10px;
+}
+@media screen and (max-width: 800px) {
+  margin: 0 50px;
+  margin-bottom: 10px;
+
+}
 `
 const SetTitle = styled(Link)`
 text-decoration: none;
@@ -61,6 +71,13 @@ font-size: 1rem;
   font-size: 0.75rem;
 }
 `
+const BadgeDiv = styled.div`
+position: absolute;
+@media screen and (max-width: 480px) {
+  top: 3px;
+  left: 7px;
+}
+`
 
 export default function SetCard(props) {
   const { set } = props
@@ -92,18 +109,21 @@ export default function SetCard(props) {
 
   return (
     <Element name={(!set.locked && set.points < 500) ? "scrollHere" : "" }>
-    <Set key={set.id} style={{ backgroundColor: (set.locked ? "#F5F5F5" : (set.points >= 500 ? "#abf7b1" : "rgba(255, 156, 251, 0.4)")), cursor: (set.locked ? "default" : "pointer") }}>
+    <Set key={set.id} style={{ backgroundColor: (set.locked ? "#F5F5F5" : (set.points >= 500 ? "#abf7b1" : "rgba(255, 156, 251, 0.4)")), cursor: (set.locked ? "default" : "pointer"), position: "relative" }}>
+
+<BadgeDiv>
       {
         set.locked ? (
-          <FontAwesomeIcon icon={faLock} style={{ position: "absolute" }} />
+          <FontAwesomeIcon icon={faLock} />
         ) : (
           resource ? (
-            <FontAwesomeIcon icon={faBook} style={{ position: "absolute" }} />
+            <FontAwesomeIcon icon={faBook} />
           ) : (
-            <FontAwesomeIcon icon={faPencil} style={{ position: "absolute" }} />
+            <FontAwesomeIcon icon={faPencil} />
           )
         )
       }
+      </BadgeDiv>
       <SetTitle href={set.locked ? "#" : ((resource ? "/resources/" : "/sets/") + set.id)} style={{ cursor: (set.locked ? "default" : "pointer") }} onClick={(e)=>{if(set.locked)e.preventDefault()}}>
         {set.name.split("-")[0]}<br/>{set.name.split("-").slice(1).join("-")}
       </SetTitle>

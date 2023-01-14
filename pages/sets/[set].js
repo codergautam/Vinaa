@@ -18,6 +18,9 @@ const Content = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  @media (max-width: 600px) {
+    height: 100%;
+  }
 `
 
 const Card = styled.div`
