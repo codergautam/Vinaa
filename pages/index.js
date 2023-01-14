@@ -139,14 +139,14 @@ function HomePage() {
               cursor={false}
               sequence={[
                 "Vinaa",
-                200,
+                300,
                 () => setColor("#3086EB"),
-                500,
+                1000,
                 () => setColor("black"),
                 "வினா",
-                200,
+                300,
                 () => setColor("#EF3934"),
-                500,
+                1000,
                 () => setColor("black"),
               ]}
               repeat={Infinity}
