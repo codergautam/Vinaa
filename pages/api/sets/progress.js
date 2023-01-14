@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       })
 
     try {
-      const { id, accuracy, done, timePerQuestion } = JSON.parse(req.body)
+      const { id, accuracy, done, timePerQuestion, questionCnt } = JSON.parse(req.body)
 
 
       if(!id) return res.status(400).json({
@@ -70,6 +70,8 @@ export default async function handler(req, res) {
           if(timePerQuestion < 2000) multiplier = 3
         }
 
+        if(questionCnt > 20) multiplier *= 2
+        if(questionCnt > 35) multiplier *= 1.5
 
         // console.log(multiplier)
 

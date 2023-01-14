@@ -53,7 +53,7 @@ export default function Question({
   done,
   last,
   total,
-  questionNum
+  questionNum,
 }) {
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()
@@ -144,7 +144,8 @@ export default function Question({
             <Option
               key={answer.id}
               onClick={() => {
-                if(answerAudios[answer.id] && (typeof selected === "number" || !data.answers[answer.id].correct)) answerAudios[answer.id].play()
+                console.log(answer.label, data.question)
+                if(answerAudios[answer.id] && (typeof selected === "number" || (!data.answers[answer.id].correct || answer.label.trim() != data.question.trim()))) answerAudios[answer.id].play()
                 if(typeof selected === "number") return;
                 setSelected(answer.id)
               }}

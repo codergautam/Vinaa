@@ -7,12 +7,10 @@ import path from "path"
 
 let queueLength = 0;
 
-function recordTamil(text) {
+function recordTamil(text,id=v4()) {
   if(!checkIfTamil(text)) {
     return;
   }
-
-  const id = v4();
 
   let subscriptionKey = process.env.SUBSCRIPTION_KEY;
   let serviceRegion = "eastus";
@@ -55,12 +53,14 @@ function recordTamil(text) {
     });
     console.log("Now synthesizing to: " + filename);
   });
-}, queueLength * 3000);
+}, queueLength * 5000);
 
 }
 
 function checkIfTamil(text) {
   // Regex: ^[\u0B80-\u0BFF]+$
+  text = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+
   return /^[\u0B80-\u0BFF]+$/.test(text.split("").filter((c) => c !== " ").join(""));
 }
 
@@ -101,11 +101,11 @@ export default async function handler(req, res) {
           if(recorded[e.question]) {
             console.log("Found "+e.question+" from cache")
         e.questionAudio = recorded[e.question];
-            
+
           } else {
         let record = await recordTamil(e.question);
         e.questionAudio = record;
-          
+
         recorded[e.question] = record;
           }
         } catch(e) {

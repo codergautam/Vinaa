@@ -8,6 +8,7 @@ import ProgressBar from "@ramonak/react-progress-bar"
 import styles from "./progressfix.module.css"
 import { useState, useEffect } from "react";
 import useWindowSize from "./useWindowSize"
+import { Element, scroller } from "react-scroll"
 
 const Set = styled.div`
 cursor: pointer;
@@ -81,7 +82,16 @@ export default function SetCard(props) {
   }, [size])
 
   let resource = set.questions[0].text;
+
+  scroller.scrollTo("scrollHere", {
+    duration: 500,
+    delay: 0,
+    smooth: "easeInOutQuart",
+    offset: -200
+  })
+
   return (
+    <Element name={(!set.locked && set.points < 500) ? "scrollHere" : "" }>
     <Set key={set.id} style={{ backgroundColor: (set.locked ? "#F5F5F5" : (set.points >= 500 ? "#abf7b1" : "rgba(255, 156, 251, 0.2)")), cursor: (set.locked ? "default" : "pointer") }}>
       {
         set.locked ? (
@@ -94,7 +104,7 @@ export default function SetCard(props) {
           )
         )
       }
-      <SetTitle href={set.locked ? "" : ((resource ? "/resources/" : "/sets/") + set.id)} style={{ cursor: (set.locked ? "default" : "pointer") }}>
+      <SetTitle href={set.locked ? "#" : ((resource ? "/resources/" : "/sets/") + set.id)} style={{ cursor: (set.locked ? "default" : "pointer") }} onClick={(e)=>{if(set.locked)e.preventDefault()}}>
         {set.name.split("-")[0]}<br/>{set.name.split("-").slice(1).join("-")}
       </SetTitle>
       <SetInfo>
@@ -132,5 +142,6 @@ export default function SetCard(props) {
       </SetInfo>
 
     </Set>
+    </Element>
   )
 }

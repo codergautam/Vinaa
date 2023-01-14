@@ -120,6 +120,18 @@ export function deleteProgress({ id, user }) {
   })
 }
 
+export function updateSet(setid, questions) {
+  return new Promise((resolve, reject) => {
+    db.run("UPDATE sets SET questions = ? WHERE id = ?", [JSON.stringify(questions), setid], (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
 export function getAllSets() {
   return new Promise((resolve, reject) => {
     db.all("SELECT * FROM sets", (err, rows) => {

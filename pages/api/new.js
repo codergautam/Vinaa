@@ -55,12 +55,15 @@ function recordTamil(text) {
     });
     console.log("Now synthesizing to: " + filename);
   });
-}, queueLength * (queueLength < 3 ? 1000 : 5000));
+}, queueLength * (queueLength < 3 ? 5000 : 5000));
 
 }
 
 function checkIfTamil(text) {
   // Regex: ^[\u0B80-\u0BFF]+$
+  // Remove punctioations
+  text = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+  console.log(text);
   return /^[\u0B80-\u0BFF]+$/.test(text.split("").filter((c) => c !== " ").join(""));
 }
 
@@ -102,11 +105,11 @@ export default async function handler(req, res) {
           if(recorded[base64question]) {
             console.log("Found "+e.question+" from cache")
         e.questionAudio = recorded[base64question];
-            
+
           } else {
         let record = await recordTamil(e.question);
         e.questionAudio = record;
-          
+
         recorded[base64question] = record;
           }
         } catch(e) {

@@ -132,9 +132,16 @@ export default function Results({ questions, results, timeElapsed, pointsGained 
         ) : <p>Great job!</p>}
         <Button onClick={() => window.location.reload()}>
 
-          {resource ? "Review Again" : "Try again"}
+          {resource ? "Review Again" : "Practice again"}
         </Button>
+        &nbsp;
+        &nbsp;
+        <Button onClick={() => {window.location.href="/learn"}}>
+
+{resource ? "Home" : "Home"}
+</Button>
       </Content>
+
     </Wrapper>
   )
 }

@@ -201,7 +201,7 @@ export default function Question({ data, update, remove }) {
         value={cur.question}
       />
 
-      <input type="checkbox" value={data.questionAudio} onChange={
+      <input type="checkbox" checked={cur.questionAudio} onChange={
         (e) => {
           if(e.target.checked) {
             setCur({
@@ -212,7 +212,8 @@ export default function Question({ data, update, remove }) {
             setCur({
               ...cur,
               questionAudio: false,
-              showQuestion: true
+              showQuestion: true,
+              prompt:""
             })
           }
         }
@@ -221,7 +222,7 @@ export default function Question({ data, update, remove }) {
 
       <br/>
 
-      <input type="checkbox" value={data.answerAudio} onChange={(e) => {
+      <input type="checkbox" checked={cur.answerAudio} onChange={(e) => {
         if(e.target.checked) {
           setCur({
             ...cur,
@@ -241,6 +242,7 @@ export default function Question({ data, update, remove }) {
           ...cur,
           showQuestion: e.target.checked
         })
+      
         update(data.id, cur)
       }} id={"showQ"+data.id}/>
 
