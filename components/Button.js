@@ -20,6 +20,7 @@ const common = `
   box-shadow: 4px 4px 0px 1px rgba(135, 70, 255, 0.4);
   opacity: 0.8;
   transition: opacity 200ms, box-shadow 200ms;
+  border-radius: 5px;
 
   :hover {
     opacity: 1;

@@ -70,7 +70,7 @@ export default function Navbar(props) {
     <div>
       <Nav>
           <LogoText/>
-          <UserItem style={{backgroundColor: "cyan"}} onClick={()=>{window.location.href="/sets/new"}}>
+          <UserItem style={{backgroundColor: "#68d7e3"}} onClick={()=>{window.location.href="/sets/new"}}>
 Create a New Set
 </UserItem>
 

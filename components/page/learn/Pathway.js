@@ -23,11 +23,11 @@ const SetGroup = styled.div`
 `
 
 const UnitCard = styled.div`
-  background-color: #f5f5f5;
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
   text-align: center;
+  
 
 `
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
@@ -130,7 +130,7 @@ export default function Sets() {
 
         return (
           <div>
-            <UnitCard>
+            <UnitCard style={{backgroundColor: unit[unit.length-1].locked ? unit[0].locked ? "#c2c4c3" : "#d4aed0" : "#7eb37b"}}>
           <h1>{pathway[i].name}</h1>
           <p>{pathway[i].description}</p>
           {
