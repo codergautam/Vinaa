@@ -54,6 +54,7 @@ const Hero = styled.div`
   gap: clamp(30px, 40px, 70px);
 `
 const FrontMessage = styled.div`
+width: 300px;
 `
 const Title = styled.h1`
   font-size: clamp(3rem, 9vw, 4.7rem);
@@ -61,12 +62,14 @@ const Title = styled.h1`
   margin: 0;
   color: var(--color-dark);
   transition: all 0.2s ease-in-out;
-
+  display: inline-block;
 `
-const Description = styled.p`
+const Description = styled.span`
   font-size: 1.5rem;
   line-height: 100%;
   color: var(--color-gray);
+  display: inline-block;
+
 `
 const ActionGroup = styled.div`
   margin-top: 15px;
@@ -141,23 +144,39 @@ function HomePage() {
                 "Vinaa",
                 300,
                 () => setColor("#3086EB"),
-                1000,
+                1500,
                 () => setColor("black"),
                 "வினா",
                 300,
                 () => setColor("#EF3934"),
-                1000,
+                1500,
                 () => setColor("black"),
               ]}
               repeat={Infinity}
               speed={5}
               deletionSpeed={5}
               color={color}
+              wrapper={"span"}
+              style={{display: "inline-block"}}
             />
           </Title>
-          <Description>
-            தமிழ் கற்க சிறந்த வழி!
-          </Description>
+          <br/>
+            <Description>
+            <TypeAnimation
+              cursor={false}
+              sequence={[
+                "தமிழ் கற்க சிறந்த வழி!",
+                1800,
+                "The best way to learn Tamil!",
+                1800,
+              ]}
+              repeat={Infinity}
+              speed={50}
+              deletionSpeed={75}
+              style={{display: "inline-block"}}
+            />
+            </Description>
+            <br/>
           <ActionGroup>
             <Button onClick={signin}>Get started</Button>
             <Button secondary onClick={signin}>Log in</Button>
