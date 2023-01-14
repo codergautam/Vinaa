@@ -71,7 +71,7 @@ export default function Learn(props) {
   return (
     <Wrapper>
       <PageTitle title="Learn" />
-      <Navbar name={session.fname} admin={props.admin}/>
+      <Navbar name={session.fname} admin={props.admin} />
       <Content>
         <Pathway/>
       </Content>

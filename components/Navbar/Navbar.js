@@ -70,9 +70,14 @@ export default function Navbar(props) {
     <div>
       <Nav>
           <LogoText/>
+          {
+            props.admin ?
+            (
           <UserItem style={{backgroundColor: "#68d7e3", color:"white", paddingLeft: "5px", paddingRight: "5px"}} onClick={()=>{window.location.href="/sets/new"}}>
 Create a Quiz
 </UserItem>
+            ) : null
+}
 
           <UserItem onClick={()=>{setHover(!hover)}}>
             <span >{props.name}</span>
@@ -105,4 +110,4 @@ Create a Quiz
 
     </div>
   );
-}
+    }
