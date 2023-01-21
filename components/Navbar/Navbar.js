@@ -2,7 +2,8 @@ import { signOut } from "next-auth/react"
 import { useState } from "react"
 import styled from "styled-components"
 import LogoText from "./LogoText"
-
+import Modal from 'react-modal';
+import Button from '@/components/Button'
 const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -62,22 +63,69 @@ const DropDownContent = styled.div`
   cursor: pointer;
   user-select: none;
 `
+const TileButton = styled.button`
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin: 0 10px;
+  background-color: var(--color-white);
+  border-radius: 5px;
+  border: 1px solid var(--color-gray);
+  color: var(--color-gray);
+  transition: all 0.2s ease-in-out;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  width: 250px;
+  height: 150px;
+`
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 export default function Navbar(props) {
   let [hover, setHover] = useState(false)
+  let [createModal, setCreateModal] = useState(false)
 
   return (
     <div>
+       <Modal
+        isOpen={createModal}
+        onRequestClose={() => {setCreateModal(false)}}
+        style={customStyles}
+        contentLabel="Quiz type"
+      >
+  <center>
+<h1> Select Quiz type</h1>
+    <div style={{display: "flex"}}>
+    <br/>
+    <br/>
+      
+    <TileButton onClick={()=>window.location.href="/sets/newsimple"}>
+    <h2>Words</h2>
+      <p>Simple quiz for Tamil words & Defenition.</p>
+    </TileButton>
+        <TileButton onClick={()=>window.location.href="/sets/newsimple"}>
+    <h2>Advanced</h2>
+      <p>Advanced quiz for any question type & custom options.</p>
+    </TileButton>
+      </div>
+    <br/>
+    
+        <Button onClick={()=>{setCreateModal(false)}}>Cancel</Button>
+        </center>
+      </Modal>
       <Nav>
           <LogoText/>
-          {
-            props.admin ?
-            (
-          <UserItem style={{backgroundColor: "#68d7e3", color:"white", paddingLeft: "5px", paddingRight: "5px"}} onClick={()=>{window.location.href="/sets/new"}}>
-Create a Quiz
-</UserItem>
-            ) : null
-}
+        
 
           <UserItem onClick={()=>{setHover(!hover)}}>
             <span >{props.name}</span>
@@ -107,7 +155,22 @@ Create a Quiz
         ) : null
       } */}
 
-
+  {
+            props.admin ?
+            (
+              <div>
+                <br/><br/>
+                <center>
+          <UserItem style={{backgroundColor: "#68d7e3", color:"white", paddingLeft: "5px", paddingRight: "5px", width: "50%", minWidth: "100px", maxWidth: "500px", marginBottom: "10px"}} onClick={()=>{setCreateModal(true)}}>
+Create a Quiz
+</UserItem>
+                 <UserItem style={{backgroundColor: "#68d7e3", color:"white", paddingLeft: "5px", paddingRight: "5px", width: "50%", minWidth: "100px", maxWidth: "500px"}}  onClick={()=>{window.location.href="/admin/listsets"}}>
+My Quizzes
+</UserItem>
+                  </center>
+                </div>
+            ) : null
+}
     </div>
   );
     }

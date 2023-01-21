@@ -3,8 +3,11 @@ import { getSession } from "next-auth/react"
 
 export default async function handler(req, res) {
   const session = await getSession({ req })
-  const data = await latest()
+  let data = await latest()
+  data = data.filter((set) => set.user == session.username)
   for(let i in data) {
+
+    
     data[i].questions = JSON.parse(data[i].questions)
     // fetch points
     if(session) {

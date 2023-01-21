@@ -23,7 +23,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 export default function Sets() {
   const router = useRouter()
-  const { data, error } = useSWR("/api/sets/latest", fetcher)
+  const { data, error } = useSWR("/api/sets/mine", fetcher)
 
   if (error) {
     console.error(error);
@@ -34,10 +34,12 @@ export default function Sets() {
   )
   return (
     <SetGroup>
+      <center>
       {data.map(set => (
         <SetCard set={set} key={set.id} showId={true} />
         )
       )}
+        </center>
     </SetGroup>
   );
 }
