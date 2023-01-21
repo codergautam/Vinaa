@@ -6,16 +6,15 @@ import SetCard from "./SetCard"
 
 // use CSS grid to create a 3x2 grid of sets
 const SetGroup = styled.div`
-  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 15px;
   grid-row-gap: 15px;
+  width: 70vw;
+  min-width: 400px;
 
-  @media (max-width: 800px) {
     display: flex;
     flex-direction: column;
-  }
 `
 
 
@@ -34,12 +33,10 @@ export default function Sets() {
   )
   return (
     <SetGroup>
-      <center>
       {data.map(set => (
         <SetCard set={set} key={set.id} showId={true} />
         )
       )}
-        </center>
     </SetGroup>
   );
 }
