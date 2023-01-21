@@ -113,7 +113,7 @@ export default function Navbar(props) {
     <h2>Words</h2>
       <p>Simple quiz for Tamil words & Defenition.</p>
     </TileButton>
-        <TileButton onClick={()=>window.location.href="/sets/newsimple"}>
+        <TileButton onClick={()=>window.location.href="/sets/new"}>
     <h2>Advanced</h2>
       <p>Advanced quiz for any question type & custom options.</p>
     </TileButton>
