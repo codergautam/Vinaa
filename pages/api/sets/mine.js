@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   data = data.filter((set) => set.user == session.username)
   for(let i in data) {
 
-    
+    try {
     data[i].questions = JSON.parse(data[i].questions)
     // fetch points
     if(session) {
@@ -17,6 +17,9 @@ export default async function handler(req, res) {
       if(progress) {
         data[i].points = progress
       } else data[i].points = 0
+    }
+    } catch(e) {
+      console.error(e)
     }
   }
   res.status(200).json(data)
