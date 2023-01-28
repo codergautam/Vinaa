@@ -2,6 +2,7 @@ import styled from "styled-components"
 import useSWR from "swr"
 import { useRouter } from "next/router"
 import SetCard from "./SetCard"
+import { getSession } from "next-auth/react"
 
 
 // use CSS grid to create a 3x2 grid of sets
@@ -34,7 +35,7 @@ export default function Sets() {
   return (
     <SetGroup>
       {data.map(set => (
-        <SetCard set={set} key={set.id} showId={true} />
+        <SetCard set={set} key={set.id} showId={true} admin={true} />
         )
       )}
     </SetGroup>

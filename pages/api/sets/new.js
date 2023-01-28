@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { API } from "@/server/protected"
-import { createSet } from "@/server/db"
+import { createSet, getSet } from "@/server/db"
 import { v4 } from "uuid"
 import * as sdk from "microsoft-cognitiveservices-speech-sdk"
 import path from "path"
@@ -66,11 +66,24 @@ function checkIfTamil(text) {
 
 export default async function handler(req, res) {
   const user = await API(req, res)
+
+
   if(!user) {
     return res.status(401).json({
-      error: "Unauthorized"
+      message: "Unauthorized"
     })
   }
+
+  console.log(user)
+    // Make sure admin
+  let admins = JSON.parse(process.env.ADMINS)
+  if(!admins.includes(user.user.email)) {
+    res.status(403).json({
+      message: "You are not an admin"
+    })
+    return;
+  }
+  
 
   if(req.method !== "POST")
     return res.status(405).json({
@@ -86,8 +99,20 @@ export default async function handler(req, res) {
     })
   }
 
-  const id = nanoid(8)
-  const { name, questions } = body
+  let id = nanoid(8)
+  const { name, questions, edit } = body
+
+  if(edit) {
+    // Check if id exists
+    const set = await getSet(edit)
+    if(!set){
+      return res.status(400).json({
+        "message": "Invalid edit ID: "+edit
+      })
+    } else {
+    }
+  }
+  
   try {
 
     let recorded = {};
@@ -133,6 +158,7 @@ export default async function handler(req, res) {
 
     console.log("q:", questions)
 
+    if(edit) id= edit;
     await createSet({ id, name, questions, user: user.username })
     res.status(200).json({
       "id": id

@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   if(!data) {
     return res.status(404).json({ message: "Set not found" })
   }
+  console.log(data)
   data.questions = JSON.parse(data.questions)
   res.status(200).json(data)
 }

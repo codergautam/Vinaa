@@ -22,10 +22,11 @@ data.questions = JSON.stringify(JSON.parse(data.questions).map((q) => {
   <script>
   let questions = JSON.parse(decodeURIComponent(atob('${btoa(encodeURIComponent(data.questions))}')))
   let name = (decodeURIComponent(atob('${btoa(encodeURIComponent(data.name))}')))
+  let old = decodeURIComponent(atob('${btoa(encodeURIComponent(data.id))}'))
   function replaceall(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
   }
-  window.localStorage.setItem("newset__data", JSON.stringify({questions: questions, name: name}))
+  window.localStorage.setItem("newset__data", JSON.stringify({questions: questions, name: name, edit: old}))
   window.location.href = "/sets/new"
   </script>
   `)

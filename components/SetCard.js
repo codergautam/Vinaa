@@ -80,7 +80,7 @@ position: absolute;
 `
 
 export default function SetCard(props) {
-  const { set } = props
+  const { set, admin } = props
   const size = useWindowSize();
 
   let sizeMap = [
@@ -153,6 +153,7 @@ export default function SetCard(props) {
           }
 
         </SetPoints>
+
         {
           props.showId ? (
             <SetPoints>ID: {set.id}</SetPoints>
@@ -160,7 +161,16 @@ export default function SetCard(props) {
         }
 
       </SetInfo>
-
+                {
+          props.admin ? (
+            <div>
+              <center>
+                <br/>
+            <button onClick={()=>{location.href='/api/sets/edit/'+set.id}}>Edit quiz</button>
+              </center>
+              </div>
+          ) : null
+        }
     </Set>
     </Element>
   )

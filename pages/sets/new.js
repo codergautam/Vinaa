@@ -87,6 +87,7 @@ export default function New() {
   const [parent] = useAutoAnimate()
   const [loading, setLoading] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [edit, setEdit] = useState(false);
 
   // this is to enable access in the beforeunload event
   // because you can't access state in beforeunload
@@ -102,6 +103,7 @@ export default function New() {
       saved = JSON.parse(saved)
       setQuestions(saved.questions)
       setName(saved.name)
+      setEdit(saved.edit)
     }
 
     const saveData = () => {
@@ -232,7 +234,7 @@ export default function New() {
               "Accept": "application/json",
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({ questions, name })
+            body: JSON.stringify({ questions, name, edit })
           })
           const data = await res.json()
           setCreating(false)

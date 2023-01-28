@@ -67,12 +67,12 @@ export default function Question({
 
   useEffect(() => {
     if(!data?.answers) return;
-    setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/audio/"+answer.answerAudio+".wav") : null));
+    setAnswerAudios(data.answers.map(answer => answer.answerAudio ? new Audio("/api/audio/"+answer.answerAudio+".wav") : null));
   }, [data?.answers]);
 
   useEffect(() => {
     setSelected()
-    if(data?.questionAudio) setQuestionAudio("/audio/"+data.questionAudio+".wav")
+    if(data?.questionAudio) setQuestionAudio("/api/audio/"+data.questionAudio+".wav")
   }, [data?.id])
 
 

@@ -46,6 +46,17 @@ export function createUser({ id=v4(), user, email, fname }) {
 
 export function createSet({ name, questions, user, id }) {
   return new Promise((resolve, reject) => {
+    getSet(id).then((set) => {
+      if (set) {
+
+        db.run("UPDATE sets SET name=?, questions=?, user=? WHERE id=?", [name, questions, user, id], (err) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(id)
+          }
+      })
+      } else {
     db.run("INSERT INTO sets VALUES (?,?,?,?)", [name, JSON.stringify(questions), user, id], (err) => {
       if (err) {
         reject(err)
@@ -53,6 +64,8 @@ export function createSet({ name, questions, user, id }) {
         resolve()
       }
     })
+      }
+    });
   })
 }
 export function getSet(id) {
