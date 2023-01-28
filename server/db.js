@@ -49,7 +49,7 @@ export function createSet({ name, questions, user, id }) {
     getSet(id).then((set) => {
       if (set) {
 
-        db.run("UPDATE sets SET name=?, questions=?, user=? WHERE id=?", [name, questions, user, id], (err) => {
+        db.run("UPDATE sets SET name=?, questions=?, user=? WHERE id=?", [name, JSON.stringify(questions), user, id], (err) => {
           if (err) {
             reject(err)
           } else {
