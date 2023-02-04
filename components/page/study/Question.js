@@ -57,6 +57,7 @@ export default function Question({
   last,
   total,
   questionNum,
+  all
 }) {
   const [selected, setSelected] = useState()
   const [parent] = useAutoAnimate()

@@ -9,6 +9,7 @@ import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/study/Header"
 import Question from "@/components/page/study/Question"
 import Results from "@/components/page/study/Results"
+import Button from "@/components/Button"
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -53,33 +54,90 @@ export default function Set() {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [pointsGained, setPointsGained] = useState(0);
+  const [flip, setFlip] = useState(false)
 
   let [questions, setQuestions] = useState([]);
   useEffect(() => {
     // console.log("data", data)
     if (data) {
-    setStartTime(Date.now());
+      setStartTime(Date.now());
       console.log("shuffling questions")
       setQuestions(data?.questions?.sort(() => Math.random() - 0.5));
+
     }
   }, [data]);
+
+  useEffect(() => {
+    if(flip) {
+            if (data?.questions) {
+        let answerOptions = data?.questions?.map((q) => {
+          return { question: q.question, audio: q.questionAudio }
+
+        })
+        console.log(answerOptions)
+        answerOptions = [...new Map(answerOptions.map(item => [item.question, item])).values()];
+        // get only unique answers
+
+        let newQuestions = [];
+        data?.questions?.forEach((e) => {
+          let options = answerOptions.filter((o) => o.question !== e.question);
+          // Get 3 options random
+          options = options.sort((a, b) => Math.random() - 0.5).slice(0, 3)
+          options.push({ question: e.question, audio: e.questionAudio, correct: true })
+          // add current o
+          options = options.sort((a, b) => Math.random() - 0.5).map((q, i) => {
+            return {
+              id: i,
+              correct: q.correct ?? false,
+              label: q.question,
+              answerAudio: q.audio
+
+            }
+          })
+
+
+          console.log(e)
+          let newQ = {
+            id: e.id,
+            answerAudio: true,
+            prompt: e.prompt,
+            question: e.answers.find((a) => a.correct).label,
+            questionAudio: e.answers.find((a) => a.correct).answerAudio,
+            showQuestion: true,
+            answers: options
+          }
+
+          newQuestions.push(newQ)
+        
+        })
+        setQuestions(newQuestions)
+      }
+    } else {
+      if(data?.questions) setQuestions(data?.questions)
+      else setQuestions([])
+    }
+  }, [flip])
 
 
   return (
     <Wrapper>
-      <PageTitle title={data ? data.name : "Study set"} />
+      
       <Content ref={parent}>
+        
         {data ? (
           <>
             <Header title={data.name} id={set} />
+            <PageTitle title={data ? data.name : "Study set"} /><Button style={{width: "200px"}} onClick={()=>setFlip(!flip)}>{flip?"Questions":"Answers"}</Button>
             {done ? (
-              <Results questions={data.questions} results={results} timeElapsed={endTime-startTime} pointsGained={pointsGained} />
+              <Results questions={data.questions} results={results} timeElapsed={endTime - startTime} pointsGained={pointsGained} />
             ) : (
               <Card>
+                
                 <Question
                   last={questions.length - 1 === q}
                   data={questions[q]}
                   total={questions.length}
+                  all={questions}
                   questionNum={q + 1}
                   done={(selected, correct) => {
                     const temp = results.slice()
@@ -93,32 +151,34 @@ export default function Set() {
 
                     if (q + 1 === data.questions.length) {
                       const correct = tempCorrect;
-                      const accuracy = Math.round((correct / (q+1)) * 100)
+                      const accuracy = Math.round((correct / (q + 1)) * 100)
                       const timeElapsed = Date.now() - startTime;
                       setEndTime(Date.now())
                       // console.log(temp, correct, q+1, accuracy)
-                       fetch("/api/sets/progress", {
-                         method: "POST",
-                         body: JSON.stringify({
-                           id: set,
-                           accuracy,
-                           timePerQuestion: (timeElapsed / (q+1)),
-                           questionCnt: q+1,
-                         }),
-                       }).then((res) => {
-                          res.json().then((data) => {
-                            if (data.error) {
-                              toast.error(data.error)
-                            } else {
-                              toast.success("You now have " + data.points + " points on this lesson! ("+data.gained+" gained)", {duration: 5000});
-                              setPointsGained(data.gained)
-                              setDone(true)
-                            }
-                          });
+                      fetch("/api/sets/progress", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          id: set,
+                          accuracy,
+                          timePerQuestion: (timeElapsed / (q + 1)),
+                          questionCnt: q + 1,
+                        }),
+                      }).then((res) => {
+                        res.json().then((data) => {
+                          if (data.error) {
+                            toast.error(data.error)
+                          } else {
+                            toast.success("You now have " + data.points + " points on this lesson! (" + data.gained + " gained)", { duration: 5000 });
+                            setPointsGained(data.gained)
+                            setDone(true)
+                          }
                         });
-                     }
+                      });
+                    }
                   }}
                 />
+               
+                
               </Card>
             )}
           </>
