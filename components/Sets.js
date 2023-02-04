@@ -21,9 +21,9 @@ const SetGroup = styled.div`
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
-export default function Sets() {
+export default function Sets({all}) {
   const router = useRouter()
-  const { data, error } = useSWR("/api/sets/mine", fetcher)
+  const { data, error } = useSWR(all?"/api/sets/all":"/api/sets/mine", fetcher)
 
   if (error) {
     console.error(error);
