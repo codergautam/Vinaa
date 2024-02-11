@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import Button from "@/components/Button"
 import ReactMarkdown from "react-markdown"
@@ -21,7 +20,6 @@ export default function Page({
   done,
   last
 }) {
-  const [parent] = useAutoAnimate()
   // let answerAudios = [];
 
 2
@@ -34,7 +32,7 @@ export default function Page({
 
   if(data) {
   return (
-    <Wrapper ref={parent}>
+    <Wrapper>
       <center>
         <h2>Page {data.id+1}</h2>
 

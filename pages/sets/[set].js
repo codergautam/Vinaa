@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import useSWR from "swr"
 import styled from "styled-components"
 import toast from "react-hot-toast"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/study/Header"
@@ -50,7 +49,6 @@ export default function Set() {
   const [results, setResults] = useState([])
   const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
-  const [parent] = useAutoAnimate()
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [pointsGained, setPointsGained] = useState(0);
@@ -108,7 +106,7 @@ export default function Set() {
           }
 
           newQuestions.push(newQ)
-        
+
         })
         setQuestions(newQuestions)
       }
@@ -121,9 +119,9 @@ export default function Set() {
 
   return (
     <Wrapper>
-      
-      <Content ref={parent}>
-        
+
+      <Content>
+
         {data ? (
           <>
             <Header title={data.name} id={set} />
@@ -132,7 +130,7 @@ export default function Set() {
               <Results questions={data.questions} results={results} timeElapsed={endTime - startTime} pointsGained={pointsGained} />
             ) : (
               <Card>
-                
+
                 <Question
                   last={questions.length - 1 === q}
                   data={questions[q]}
@@ -177,8 +175,8 @@ export default function Set() {
                     }
                   }}
                 />
-               
-                
+
+
               </Card>
             )}
           </>

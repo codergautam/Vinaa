@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import Button from "@/components/Button"
 
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Trash } from "react-feather"
 
 const Group = styled.div`
@@ -78,7 +77,6 @@ const Delete = styled.button`
 
 export default function Page({ data, update, remove }) {
   const [cur, setCur] = useState(data)
-  const [parent] = useAutoAnimate()
   const name = `q__radio_${data.id}`
 
   console.log("cur:", cur)

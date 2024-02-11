@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import styled, { keyframes } from "styled-components"
 import { PlusCircle } from "react-feather"
 import toast from "react-hot-toast"
@@ -84,7 +83,6 @@ const toaster = text => toast(text, {
 export default function New() {
   const [name, setName] = useState("")
   const [questions, setQuestions] = useState([])
-  const [parent] = useAutoAnimate()
   const [loading, setLoading] = useState(false)
   const [creating, setCreating] = useState(false)
   const [edit, setEdit] = useState(false);
@@ -257,7 +255,7 @@ export default function New() {
 
           {loading ? <Spinner /> : "Publish"}
         </Header>
-        <Card ref={parent}>
+        <Card>
           {questions.map(question => (
             <Question
               key={question.id}

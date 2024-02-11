@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import styled from "styled-components"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/study/Header"
@@ -45,12 +44,11 @@ export default function Set() {
   const [results, setResults] = useState([])
   const [correctCnt, setCorrectCnt] = useState(0)
   const [q, setQ] = useState(0)
-  const [parent] = useAutoAnimate()
 
   return (
     <Wrapper>
       <PageTitle title={data ? data.name : "Study resource"} />
-      <Content ref={parent}>
+      <Content>
         {data ? (
           <>
             <Header title={data.name} id={set} />

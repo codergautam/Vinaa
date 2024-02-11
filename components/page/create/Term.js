@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Trash } from "react-feather"
 
 const Group = styled.div`
@@ -75,7 +74,7 @@ const Radio = styled.input`
 const Input = styled.textarea`
   outline: none;
   border: none;
-  
+
   height: 70px;
   max-height: 70px;
   min-height: 70px;
@@ -83,7 +82,7 @@ const Input = styled.textarea`
   width: 100%;
   max-width: 100%;
   min-width: 100%;
-  
+
   resize: none;
   font-size: 1.2rem;
   padding: 7px 10px;
@@ -174,7 +173,6 @@ const Amount = styled.button`
 
 export default function Term({ data, update, remove }) {
   const [cur, setCur] = useState(data)
-  const [parent] = useAutoAnimate()
   const name = `q__radio_${data.id}`
 
   console.log("cur:", cur)

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import styled, { keyframes } from "styled-components"
 import { PlusCircle } from "react-feather"
 import toast from "react-hot-toast"
@@ -89,7 +88,6 @@ function checkIfTamil(text) {
 export default function New() {
   const [name, setName] = useState("")
   const [questions, setQuestions] = useState([])
-  const [parent] = useAutoAnimate()
   const [loading, setLoading] = useState(false)
   const [creating, setCreating] = useState(false)
 
@@ -170,7 +168,7 @@ console.log(index)
 
           // client-side input validation
             console.log(questions)
-      
+
           for(let i in questions) {
             i = +i // convert i to number
             const q = questions[i]
@@ -201,7 +199,7 @@ console.log(index)
               console.log(otherOptions[rand])
               otherOptions.splice(rand, 1);
 
-          
+
             }
 
             // Shuffle the answers
@@ -230,7 +228,7 @@ console.log("final", final)
             position: "bottom-center"
           })
         }
-      
+
         toast("Creating set... (this can take upto 1-2 minutes if there is lots of audio)", {
           position: "bottom-center"
         });
@@ -258,14 +256,14 @@ console.log("final", final)
           toast.success("Set created...", {
             position: "bottom-center"
           })
-      
+
          Router.push("/sets/" + data.id)
         }} loading={loading}>
 
 
           {loading ? <Spinner /> : "Publish"}
         </Header>
-        <Card ref={parent}>
+        <Card>
           {questions.map(question => (
             <Term
               key={question.id}

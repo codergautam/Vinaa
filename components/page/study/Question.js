@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import Button from "@/components/Button"
 import AudioButton from "./AudioButton"
@@ -60,7 +59,6 @@ export default function Question({
   all
 }) {
   const [selected, setSelected] = useState()
-  const [parent] = useAutoAnimate()
   const [questionAudio, setQuestionAudio] = useState("")
   // let answerAudios = [];
   const [answerAudios, setAnswerAudios] = useState([]);
@@ -116,7 +114,7 @@ export default function Question({
 
   if(data) {
   return (
-    <Wrapper ref={parent}>
+    <Wrapper>
         <ProgressBar completed={((((questionNum-(typeof selected === "number"?0:1))/total)*100).toFixed(0))+""} customLabel={" "}/>
 
       <center>

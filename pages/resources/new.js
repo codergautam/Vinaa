@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components"
 import { PlusCircle } from "react-feather"
 import toast from "react-hot-toast"
 import Router from  "next/router"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { unstable_getServerSession as getServerSession } from "next-auth/next"
 import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/create/Header"
@@ -85,7 +84,6 @@ export default function New() {
   const [name, setName] = useState("")
   const [questions, setQuestions] = useState([])
   const [loading, setLoading] = useState(false)
-  const [parent] = useAutoAnimate()
 
   // this is to enable access in the beforeunload event
   // because you can't access state in beforeunload
@@ -197,7 +195,7 @@ export default function New() {
 
           {loading ? <Spinner /> : "Publish"}
         </Header>
-        <Card ref={parent}>
+        <Card>
           {questions.map(question => (
             <Page
               key={question.id}
