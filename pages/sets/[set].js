@@ -202,6 +202,7 @@ export default function Set() {
         {data ?
         liveMode && !joined ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+            <h1>Enter your name:</h1>
             <input
               type="text"
               placeholder="Your name"
