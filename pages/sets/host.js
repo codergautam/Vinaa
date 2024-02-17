@@ -1,13 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
-import useSWR from "swr"
 import styled from "styled-components"
 import toast from "react-hot-toast"
 
-import PageTitle from "@/components/PageTitle"
 import Header from "@/components/page/study/Header"
-import Question from "@/components/page/study/Question"
-import Results from "@/components/page/study/Results"
 import Button from "@/components/Button"
 import QRCode from "react-qr-code";
 
