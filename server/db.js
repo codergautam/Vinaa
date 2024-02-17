@@ -19,6 +19,11 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   email varchar(255),
   fname varchar(255)
 )`)
+// live games
+db.run(`CREATE TABLE IF NOT EXISTS games (
+  code varchar(6),
+  data varchar(30000)
+)`)
 
 export function userExists(email) {
   return new Promise((resolve, reject) => {
@@ -186,6 +191,48 @@ export function see() {
         reject(err)
       } else {
         resolve(rows)
+      }
+    })
+  })
+}
+
+export function createGame(setId) {
+  const data = { setId, state: "waiting", leaderboard: [], startTime: 0}
+  // code is 6 digits
+  let code = Math.floor(Math.random() * 1000000).toString()
+  while(code.length < 6) {
+    code = "0"+code
+  }
+  return new Promise((resolve, reject) => {
+    db.run("INSERT INTO games VALUES (?,?)", [code, JSON.stringify(data)], (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(code)
+      }
+    })
+  })
+}
+
+export function getGame(code) {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM games WHERE code=?", [code], (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+
+export function updateGame(code, data) {
+  return new Promise((resolve, reject) => {
+    db.run("UPDATE games SET data = ? WHERE code = ?", [JSON.stringify(data), code], (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
       }
     })
   })

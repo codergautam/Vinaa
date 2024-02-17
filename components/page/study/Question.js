@@ -56,7 +56,12 @@ export default function Question({
   last,
   total,
   questionNum,
-  all
+  all,
+  timeLeft,
+  liveMode,
+  liveData,
+  onAnswerClickLive,
+  rank
 }) {
   const [selected, setSelected] = useState()
   const [questionAudio, setQuestionAudio] = useState("")
@@ -119,6 +124,10 @@ export default function Question({
 
       <center>
         <h1>Question {questionNum}</h1>
+        {timeLeft ? <h2>
+          { typeof selected === "number" ? last ? "Game end in: ": "Next question in: " : "Time Left: "}
+          {(timeLeft/1000).toFixed(1)} seconds</h2> : null}
+          {rank ? <h4>Rank: #{rank}</h4> : null}
       <Ask>{data.prompt}</Ask>
       {questionAudio ? (
         <div>
@@ -162,6 +171,11 @@ export default function Question({
 
                 if(typeof selected === "number") return;
                 setSelected(answer.id)
+                if(liveMode) {
+                  // check if correct
+                  const isCorrect = answer.id === correctIndex;
+                  onAnswerClickLive(isCorrect);
+                }
               }}
               style={styles}
             >
@@ -171,7 +185,7 @@ export default function Question({
           )
         })}
       </Options>
-      {showDone ? (
+      {showDone && !liveMode ? (
         <Button onClick={() => done(selected, selected == correctIndex)}>
           {last ? "Done" : "Next"} &rarr;
         </Button>

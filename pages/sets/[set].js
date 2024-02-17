@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 import styled from "styled-components"
@@ -54,14 +54,91 @@ export default function Set() {
   const [pointsGained, setPointsGained] = useState(0);
   const [flip, setFlip] = useState(false)
 
-  let [questions, setQuestions] = useState([]);
+  const [liveMode, setLiveMode] = useState("")
+  const [playerName, setName] = useState("")
+  const [joined, setJoined] = useState(false)
+  const [liveData, setLiveData] = useState(null)
+  const [waiting, setWaiting] = useState(true)
+
+  const [timeLeft, setTimeLeft] = useState(0)
+  const answerClicked = useRef(false)
+  const playerId = useRef(null)
+
+  useEffect(() => {
+    if(window.location.search.includes("liveMode")) {
+      // liveMode=gameId
+      setLiveMode(window.location.search.split("=")[1])
+    }
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if(liveMode && joined && waiting) {
+      interval = setInterval(() => {
+      fetch(`/api/game/getgame?code=${liveMode}`).then(res => res.json()).then(data => {
+        if(data.error) {
+          toast.error(data.error)
+        } else {
+          const actualData = JSON.parse(data.data);
+          setLiveData(actualData);
+          if(actualData.state === "started") {
+            setWaiting(false)
+      setStartTime(Date.now());
+
+            console.log("Game started", actualData)
+            setTimeLeft(Date.now() - actualData.startTime)
+          }
+        }
+      });
+    }, 2000);
+    }
+
+    return () => clearInterval(interval);
+  }, [liveMode, joined, waiting]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+
+      if(!liveMode || !liveData) return;
+      console.log("timeleft", timeLeft)
+      if(liveData?.startTime) setTimeLeft(20000- ((Date.now() - liveData.startTime)%20000))
+    }, 100)
+    return () => clearInterval(interval)
+  }, [liveData]);
+
+  useEffect(() => {
+    if(!data || !liveMode) return;
+
+    const elapsed = Date.now() - liveData?.startTime;
+    const expectedQ = Math.floor(elapsed / 20000);
+
+    if(expectedQ !== q && expectedQ < data.questions.length) {
+      setQ(expectedQ)
+      if(!answerClicked.current) {
+        toast.error("You didn't answer in time (+0 points)")
+      }
+      answerClicked.current = false;
+
+    }
+
+    if(expectedQ >= data.questions.length && !done) {
+      setDone(true)
+      setEndTime(Date.now())
+    }
+
+    console.log("expectedQ", expectedQ, q)
+  }, [timeLeft]);
+
+  let [questions, setQuestions] = useState(liveData ? data?.questions : [])
   useEffect(() => {
     // console.log("data", data)
-    if (data) {
+    if (data && !liveMode) {
       setStartTime(Date.now());
       console.log("shuffling questions")
       setQuestions(data?.questions?.sort(() => Math.random() - 0.5));
 
+    } else if(data) {
+      setQuestions(data?.questions)
     }
   }, [data]);
 
@@ -122,14 +199,59 @@ export default function Set() {
 
       <Content>
 
-        {data ? (
+        {data ?
+        liveMode && !joined ? (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+            <input
+              type="text"
+              placeholder="Your name"
+              value={playerName}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Button
+              onClick={() => {
+                if (!playerName) return toast.error("Please enter your name")
+                fetch(`/api/game/join?code=${liveMode}&name=${playerName}`).then((res) => {
+                  res.json().then((data) => {
+                    if (data.error) {
+                      toast.error(data.error)
+                    } else {
+                      toast.success("Joined game")
+                      playerId.current = data.id;
+                      fetch(`/api/game/getgame?code=${liveMode}`).then((res) => {
+                        res.json().then((data) => {
+                      setJoined(true)
+                        });
+                      });
+                    }
+                  });
+                });
+              }}
+            >
+              Start
+            </Button>
+          </div>
+        ) :
+
+        liveMode && joined && waiting ? (
+          <>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+            <h1>Waiting for game to start...<br/>Players joined: {liveData?.leaderboard?.length}</h1>
+            </div>
+          </>
+        ) :
+        (
           <>
             <Header title={data.name} id={set} />
-            <PageTitle title={data ? data.name : "Study set"} /><Button style={{width: "200px"}} onClick={()=>setFlip(!flip)}>{flip?"Questions":"Answers"}</Button>
+            <PageTitle title={data ? data.name : "Study set"} />
+            {!liveMode ? (
+            <Button style={{width: "200px"}} onClick={()=>setFlip(!flip)}>{flip?"Questions":"Answers"}</Button>
+            ) : null}
             {done ? (
               <Results questions={data.questions} results={results} timeElapsed={endTime - startTime} pointsGained={pointsGained} />
             ) : (
               <Card>
+
 
                 <Question
                   last={questions.length - 1 === q}
@@ -137,6 +259,29 @@ export default function Set() {
                   total={questions.length}
                   all={questions}
                   questionNum={q + 1}
+                  timeLeft={timeLeft}
+                  liveMode={liveMode}
+                  liveData={liveData}
+                  rank={liveData?.leaderboard?.sort((a, b) => b.points - a.points).findIndex((e) => e.id === playerId.current) + 1}
+                  onAnswerClickLive={(correct) => {
+                    if(!correct) toast.error("Incorrect Answer (+0 points)")
+                    else {
+                      const maxPnts = 1000;
+                      const pnts = Math.round((timeLeft / 20000) * maxPnts);
+                      toast.success("Correct! (+"+pnts+" points)")
+
+                      fetch(`/api/game/addpoints?code=${liveMode}&playerId=${playerId.current}&points=${pnts}`).then((res) => {
+                        res.json().then((data) => {
+                          if (data.error) {
+                            toast.error(data.error)
+                          } else {
+                          }
+                        });
+                      });
+                    }
+
+                    answerClicked.current = true;
+                  }}
                   done={(selected, correct) => {
                     const temp = results.slice()
                     temp.push(selected)
@@ -145,7 +290,7 @@ export default function Set() {
                     setCorrectCnt(tempCorrect);
                     console.log("temp", temp)
                     setResults(temp)
-                    setQ(q + 1)
+                    if(!liveMode) setQ(q + 1)
 
                     if (q + 1 === data.questions.length) {
                       const correct = tempCorrect;

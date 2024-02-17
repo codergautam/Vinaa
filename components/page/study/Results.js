@@ -108,7 +108,10 @@ export default function Results({ questions, results, timeElapsed, pointsGained 
       <div>
         <Note>You scored <Percent>{accuracy}%</Percent> on your last attempt.</Note>
 
-      <Note> Time Taken: <Percent>{msToTime(timeElapsed)}</Percent> </Note>
+      <Note> Time Taken: <Percent>
+        {msToTime(timeElapsed)}
+
+        </Percent> </Note>
       <br/>
 
         </div>
@@ -167,12 +170,15 @@ function res(questions, results) {
       correct++
       continue
     }
-
+try {
     messedUp.push({
       question: (question.prompt??"")+question.question,
       chose: question.answers[results[i]].label,
       correct: question.answers[correctIndex].label
     })
+  } catch(e) {
+    console.log(e)
+  }
   }
 }
 
