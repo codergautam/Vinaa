@@ -167,9 +167,8 @@ export default function Set() {
               <h1>Join by scanning the QR code<br/>Players joined: {data.leaderboard.length}</h1>
               <br/>
               <QRCode value={`https://vinaa.net/sets/${setId}?liveMode=${code.current}`} size={600} />
-              <h1>URL: <a href={`https://vinaa.net/join`}>{`vinaa.net/join`}</a></h1>
-              <br/>
-              <h1>Code: {code.current}</h1>
+              <h1 style={{fontSize: 30}}>URL: <a href={`https://vinaa.net/join`}>{`vinaa.net/join`}</a></h1>
+              <h1 style={{fontSize: 30}}>Code: {code.current}</h1>
               <Button onClick={() => {
                 fetch(`/api/game/startgame?code=${code.current}`, {
                   method: "POST"

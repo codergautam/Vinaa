@@ -94,7 +94,7 @@ function msToTime(duration) {
     return portions.join(' ');
   }
 
-export default function Results({ questions, results, timeElapsed, pointsGained }) {
+export default function Results({ questions, results, timeElapsed, pointsGained, liveMode }) {
   const { wrong, correct } = res(questions, results)
   let resource = (questions && questions[0]?.question) ? false : true;
   const accuracy = Math.round((correct / questions?.length) * 100)
@@ -106,7 +106,9 @@ export default function Results({ questions, results, timeElapsed, pointsGained 
 
         {!resource ? (
       <div>
+        { !liveMode && (
         <Note>You scored <Percent>{accuracy}%</Percent> on your last attempt.</Note>
+        )}
 
       <Note> Time Taken: <Percent>
         {msToTime(timeElapsed)}

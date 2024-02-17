@@ -249,7 +249,7 @@ export default function Set() {
             <Button style={{width: "200px"}} onClick={()=>setFlip(!flip)}>{flip?"Questions":"Answers"}</Button>
             ) : null}
             {done ? (
-              <Results questions={data.questions} results={results} timeElapsed={endTime - startTime} pointsGained={pointsGained} />
+              <Results questions={data.questions} results={results} timeElapsed={endTime - startTime} pointsGained={pointsGained} liveMode={liveMode} />
             ) : (
               <Card>
 
@@ -263,7 +263,7 @@ export default function Set() {
                   timeLeft={timeLeft}
                   liveMode={liveMode}
                   liveData={liveData}
-                  rank={liveData?.leaderboard?.sort((a, b) => b.points - a.points).findIndex((e) => e.id === playerId.current) + 1}
+                  rank={liveData?.leaderboard?.sort((a, b) => b.score - a.score).findIndex((e) => e.id === playerId.current) + 1}
                   onAnswerClickLive={(correct) => {
                     if(!correct) toast.error("Incorrect Answer (+0 points)")
                     else {
