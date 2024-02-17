@@ -59,10 +59,13 @@ export default function Set() {
   const [joined, setJoined] = useState(false)
   const [liveData, setLiveData] = useState(null)
   const [waiting, setWaiting] = useState(true)
+  const [myRank, setRank] = useState(0)
 
   const [timeLeft, setTimeLeft] = useState(0)
   const answerClicked = useRef(false)
   const playerId = useRef(null)
+  const [playerIdState, setPlayerId] = useState(null)
+  const [myScore, setMyScore] = useState(0)
 
   useEffect(() => {
     if(window.location.search.includes("liveMode")) {
@@ -73,7 +76,7 @@ export default function Set() {
 
   useEffect(() => {
     let interval;
-    if(liveMode && joined && waiting) {
+    if(liveMode && joined ) {
       interval = setInterval(() => {
       fetch(`/api/game/getgame?code=${liveMode}`).then(res => res.json()).then(data => {
         if(data.error) {
@@ -81,12 +84,17 @@ export default function Set() {
         } else {
           const actualData = JSON.parse(data.data);
           setLiveData(actualData);
-          if(actualData.state === "started") {
+          if(actualData.state === "started" && waiting) {
             setWaiting(false)
-      setStartTime(Date.now());
 
-            console.log("Game started", actualData)
+      setStartTime(Date.now());
             setTimeLeft(Date.now() - actualData.startTime)
+          } else if(!waiting && actualData.state === 'started') {
+            if(playerIdState) {
+              console.log("setting rank")
+              setRank(actualData.leaderboard.sort((a, b) => b.score - a.score).findIndex((p) => p.id === playerIdState) + 1)
+              setMyScore(actualData.leaderboard.find((p) => p.id === playerIdState).score)
+            }
           }
         }
       });
@@ -94,13 +102,12 @@ export default function Set() {
     }
 
     return () => clearInterval(interval);
-  }, [liveMode, joined, waiting]);
+  }, [liveMode, joined, waiting, playerIdState]);
 
   useEffect(() => {
     const interval = setInterval(() => {
 
       if(!liveMode || !liveData) return;
-      console.log("timeleft", timeLeft)
       if(liveData?.startTime) setTimeLeft(20000- ((Date.now() - liveData.startTime)%20000))
     }, 100)
     return () => clearInterval(interval)
@@ -126,7 +133,6 @@ export default function Set() {
       setEndTime(Date.now())
     }
 
-    console.log("expectedQ", expectedQ, q)
   }, [timeLeft]);
 
   let [questions, setQuestions] = useState(liveData ? data?.questions : [])
@@ -219,6 +225,7 @@ export default function Set() {
                     } else {
                       toast.success("Joined game")
                       playerId.current = data.id;
+                      setPlayerId(data.id)
                       fetch(`/api/game/getgame?code=${liveMode}`).then((res) => {
                         res.json().then((data) => {
                       setJoined(true)
@@ -263,7 +270,8 @@ export default function Set() {
                   timeLeft={timeLeft}
                   liveMode={liveMode}
                   liveData={liveData}
-                  rank={liveData?.leaderboard?.sort((a, b) => b.score - a.score).findIndex((e) => e.id === playerId.current) + 1}
+                  rank={myRank}
+                  score={myScore}
                   onAnswerClickLive={(correct) => {
                     if(!correct) toast.error("Incorrect Answer (+0 points)")
                     else {

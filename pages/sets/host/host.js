@@ -125,7 +125,7 @@ export default function Set() {
         if(!data || !data.code) {
           toast.error("Failed to create game")
         } else {
-          toast.success("Game created")
+          // toast.success("Game created")
           code.current = data.code
         }
       });

@@ -61,7 +61,8 @@ export default function Question({
   liveMode,
   liveData,
   onAnswerClickLive,
-  rank
+  rank,
+  score
 }) {
   const [selected, setSelected] = useState()
   const [questionAudio, setQuestionAudio] = useState("")
@@ -127,7 +128,7 @@ export default function Question({
         {timeLeft ? <h2>
           { typeof selected === "number" ? last ? "Game end in: ": "Next question in: " : "Time Left: "}
           {(timeLeft/1000).toFixed(1)} seconds</h2> : null}
-          {rank ? <h4>Rank: #{rank}</h4> : null}
+          {rank ? <h4>Rank: #{rank} | {score} points</h4> : null}
       <Ask>{data.prompt}</Ask>
       {questionAudio ? (
         <div>
