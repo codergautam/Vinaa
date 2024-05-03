@@ -14,8 +14,8 @@ import desktopBackground from "@/assets/backgrounds/vina-bg-desktop.svg"
 import mobileBackground from "@/assets/backgrounds/vina-bg-mobile.svg"
 import indiaAnimation from "@/assets/animations/india.json"
 
-import { unstable_getServerSession as getServerSession } from "next-auth/next"
-import { authOptions } from "../pages/api/auth/[...nextauth]"
+// import { unstable_getServerSession as getServerSession } from "next-auth/next"
+// import { authOptions } from "../pages/api/auth/[...nextauth]"
 
 // redirect to the dashboard page if the user is logged in
 export async function getServerSideProps({ req, res }) {
