@@ -1,6 +1,5 @@
 import styled from "styled-components"
 import Link from "next/link"
-import Lottie from "lottie-react"
 import { signIn } from "next-auth/react"
 
 import PageTitle from "@/components/PageTitle"
@@ -76,13 +75,7 @@ const ActionGroup = styled.div`
   display: flex;
   gap: 15px;
 `
-const Animation = styled(Lottie)`
-  height: 300px;
 
-  @media(max-width: 800px) {
-    display: none;
-  }
-`
 const animationInteractivity = {
   loop: false
 }
@@ -132,10 +125,7 @@ function HomePage() {
     <Wrapper>
       <PageTitle title="Home" />
       <Hero>
-        <Animation
-          animationData={indiaAnimation}
-          loop={false}
-        />
+      
         <FrontMessage>
           <Title className="upper" style={{color, animation: "fadeIn 1s ease-in-out"}}>
             <TypeAnimation
